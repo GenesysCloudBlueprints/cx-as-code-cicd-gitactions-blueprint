@@ -44,13 +44,13 @@ jobs:
           mv terraform /usr/local/bin
           terraform version
 
-      #Init Terraform
-      - name: Initialize terraform
-        run: terraform init
-
-      ##Terraform Apply
-      - name: Apply the terraform scripts
-        run: ls -al && terraform apply --auto-approve
+      #Init Terraform and run it
+      - name: Initialize terraform and run it
+        run: | 
+          cd dev
+          terraform init
+          terraform apply --auto-approve
+          cd ..
 
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
