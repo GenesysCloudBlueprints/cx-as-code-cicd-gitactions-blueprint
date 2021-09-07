@@ -22,7 +22,7 @@ jobs:
         run: ls -al $GITHUB_WORKSPACE
 
       #Install archy
-      - name: Download and install archy
+      - name: Download and install archy!
         run: |
           mkdir archy
           cd archy
