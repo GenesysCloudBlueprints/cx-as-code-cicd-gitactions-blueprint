@@ -10,6 +10,7 @@ CLIENT_REGION = os.environ["GENESYSCLOUD_REGION"]
 CLIENT_API_REGION = os.environ["GENESYSCLOUD_API_REGION"]
 TARGET_DOMAIN = os.environ["GENESYSCLOUD_EMAIL_DOMAIN"]
 TARGET_DOMAIN_NAME = os.environ["GENESYSCLOUD_EMAIL_DOMAIN_REGION"]
+FULL_ROUTE = TARGET_DOMAIN+ "." + TARGET_DOMAIN_NAME
 FLOW_ID = os.environ["GENESYSCLOUD_FLOW_ID"]
 
 PureCloudPlatformClientV2.configuration.host = 	CLIENT_API_REGION
@@ -18,14 +19,14 @@ architectApi = PureCloudPlatformClientV2.ArchitectApi(apiClient)
 routingApi = PureCloudPlatformClientV2.RoutingApi(apiClient)
 
 def deleteEmailRoute():
-    print("\nDeleting email route for target domain: {}\n".format(TARGET_DOMAIN))
-    results = routingApi.get_routing_email_domain_routes(TARGET_DOMAIN)
-    print("Results for {}: {}".format(TARGET_DOMAIN,results))
+    print("\nDeleting email route for target domain: {}\n".format(FULL_ROUTE))
+    results = routingApi.get_routing_email_domain_routes(FULL_ROUTE)
+    print("Results for {}: {}".format(FULL_ROUTE,results))
     
     if len(results.entities)>0:
         routeId = results.entities[0].id
         routingApi.delete_routing_email_domain(routeId)
-        print("Successfully deleted email route for target domain: {}".format(TARGET_DOMAIN))
+        print("Successfully deleted email route for target domain: {}".format(FULL_ROUTE))
 
 def createEmailRoute():
     print("Creating email route 'support' for flow id: {}\n".format(FLOW_ID))
