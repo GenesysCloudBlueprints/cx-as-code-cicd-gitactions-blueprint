@@ -16,9 +16,8 @@ jobs:
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
-      TF_CLASSIFIER_URL:  "https://lw5n6y5cfe.execute-api.us-east-1.amazonaws.com/dev/emailresolver"
-      TF_CLASSIFIER_API_KEY: "A6ceupfQIL7oemrIfdtKq92MCzvjGUX29uXLK7sm"
-
+      GENESYSCLOUD_ML_CLASSIFIER_URL: "https://lw5n6y5cfe.execute-api.us-east-1.amazonaws.com/dev/emailresolver"
+      GENESYSCLOUD_ML_CLASSIFIER_API_KEY: "A6ceupfQIL7oemrIfdtKq92MCzvjGUX29uXLK7sm"
 
     steps:
       #Checks out the code out of the source control system and begins setup.
@@ -57,7 +56,7 @@ jobs:
         run: |
           cd dev
           terraform init
-          terraform apply --auto-approve
+          terraform apply --auto-approve -var="classifier_url=${{ env:GENESYSCLOUD_ML_CLASSIFIER_URL }}" -var="classifier_api_key=${{ env:GENESYSCLOUD_ML_CLASSIFIER_API_KEY }}"
           cd ..
 
       #Run Archy to import a flow
