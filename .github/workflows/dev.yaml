@@ -1,6 +1,5 @@
 name: Genesys Cloud - CI/CD Example
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
     branches: [main]
   pull_request:
@@ -17,6 +16,9 @@ jobs:
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+      TF_CLASSIFIER_URL:  "https://lw5n6y5cfe.execute-api.us-east-1.amazonaws.com/dev/emailresolver"
+      TF_CLASSIFIER_API_KEY: "A6ceupfQIL7oemrIfdtKq92MCzvjGUX29uXLK7sm"
+
 
     steps:
       #Checks out the code out of the source control system and begins setup.
