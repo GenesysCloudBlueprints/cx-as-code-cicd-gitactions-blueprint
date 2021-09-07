@@ -1,0 +1,8 @@
+{
+  "pattern": "support",
+  "from_name": "Financial Services Support",
+  "from_email": "support@devengagedev.pure.cloud",
+  "flow": {
+    "id": "9c655790-21db-4830-a3dc-3f0093480b3a"
+  }
+}
