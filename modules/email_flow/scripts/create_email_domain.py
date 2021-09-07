@@ -20,6 +20,7 @@ routingApi = PureCloudPlatformClientV2.RoutingApi(apiClient)
 def deleteEmailRoute():
     print("\nDeleting email route for target domain: \n")
     results = routingApi.get_routing_email_domain_routes(TARGET_DOMAIN)
+    print("Results for {}: {}".format(TARGET_DOMAIN,results))
     
     if len(results.entities)>0:
         routeId = results.entities[0].id
