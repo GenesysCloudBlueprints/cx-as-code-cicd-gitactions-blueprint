@@ -21,10 +21,11 @@ jobs:
           cd archy
           wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
           unzip archy-linux.zip
-          ./archy version
+
       - name: Setup tmate session
         uses:
           mxschmitt/action-tmate@v3
+          #./archy version
           # pwd
           # ls -al
           # export PATH=$PATH:$GITHUB_WORKSPACE/archy
