@@ -20,6 +20,10 @@ jobs:
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
       - name: Checkouts Source Code
         run: |
           mkdir output
@@ -38,13 +42,13 @@ jobs:
           pwd
           archy version
 
-      #Install Terraform
-      - name: Download and install terraform
-        run: |
-          wget https://releases.hashicorp.com/terraform/1.0.6/terraform_1.0.6_linux_amd64.zip
-          unzip terraform_1.0.6_linux_amd64.zip
-          mv terraform /usr/local/bin
-          terraform version
+      # #Install Terraform
+      # - name: Download and install terraform
+      #   run: |
+      #     wget https://releases.hashicorp.com/terraform/1.0.6/terraform_1.0.6_linux_amd64.zip
+      #     unzip terraform_1.0.6_linux_amd64.zip
+      #     mv terraform /usr/local/bin
+      #     terraform version
 
       #Init Terraform and run it
       # - name: Initialize terraform and run it

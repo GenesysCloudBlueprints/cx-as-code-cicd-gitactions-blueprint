@@ -1,7 +1,11 @@
 terraform {
-  #backend "local" {
-  #  path = "/Users/johncarnell/genesys_terraform/carnell1_dev/tfstate"
-  #}
+  backend "remote" {
+    organization = "thoughtmechanix"
+
+    workspaces {
+      name = "email_aws_comprehend_dev"
+    }
+  }
 
   required_providers {
     genesyscloud = {
