@@ -70,11 +70,7 @@ jobs:
       - name: Run CLI to create email domain route
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
-          env | grep GENESYSCLOUD_FLOW_ID 
-          echo "{\"pattern\": \"support\", \"from_name\":\"Financial Services Support\", \"from_email\": \"support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}\", \"flow\": {\"id\": \"${GENESYSCLOUD_FLOW_ID}\"}}" | jq . > $GITHUB_WORKSPACE/output/email_domain.json
-          cat $GITHUB_WORKSPACE/output/email_domain.json
-          #gc routing email domains routes create $GENESYSCLOUD_EMAIL_DOMAIN
-
+          python $GITHUB_WORKSPACE/modules/email_flow/scripts/manage
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
       ## - name: Setup tmate session
