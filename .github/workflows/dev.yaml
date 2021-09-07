@@ -75,6 +75,6 @@ jobs:
 
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
-      # - name: Setup tmate session
+      ## - name: Setup tmate session
       #   uses:
       #     mxschmitt/action-tmate@v3
