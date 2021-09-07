@@ -24,4 +24,10 @@ jobs:
         run: |
           ls ${{ github.workspace }}
 
+      #Install archy archy
+      - name: Download and install archy
+        run: |
+          curl https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
+          unzip archy-linux.zip
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
