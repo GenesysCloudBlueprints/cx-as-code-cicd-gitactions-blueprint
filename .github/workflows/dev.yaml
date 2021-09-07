@@ -25,7 +25,6 @@ jobs:
           ls -al
           ./archy version
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
-
           cd ..
 
       #Lists all of the files in the workspace to makesure everything is good
