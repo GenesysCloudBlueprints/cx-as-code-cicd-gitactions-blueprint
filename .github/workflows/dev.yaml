@@ -70,7 +70,7 @@ jobs:
       - name: Run CLI to create email domain route
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
-          python $GITHUB_WORKSPACE/modules/email_flow/scripts/create_email.py
+          python $GITHUB_WORKSPACE/modules/email_flow/scripts/create_email_domain.py
 
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
