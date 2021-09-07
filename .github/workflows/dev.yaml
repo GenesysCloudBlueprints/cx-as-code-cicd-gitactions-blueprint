@@ -44,7 +44,16 @@ jobs:
           mv terraform /usr/local/bin
           terraform version
 
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      #Init Terraform
+      - name: Initialize terraform
+        run: terraform init
+
+      ##Terraform Apply
+      - name: Apply the terraform scripts
+        run: terraform apply --autoapprove
+
+      - name: Print Job Status
+        run: echo "🍏 This job's status is ${{ job.status }}."
       # - name: Setup tmate session
       #   uses:
       #     mxschmitt/action-tmate@v3
