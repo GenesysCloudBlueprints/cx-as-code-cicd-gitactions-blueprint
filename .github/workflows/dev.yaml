@@ -14,6 +14,9 @@ jobs:
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+      GENESYSCLOUD_EMAIL_DOMAIN: devengagedev"
+      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
@@ -49,12 +52,6 @@ jobs:
 
       #Init Terraform and run it
       # - name: Initialize terraform and run it
-      #   env:
-      #     GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-      #     GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-      #     GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-      #     GENESYSCLOUD_REGION: "us-west-2"
-      #     GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       #   run: |
       #     env | grep GENESYS
       #     cd dev
@@ -63,21 +60,19 @@ jobs:
       #     cd ..
 
       #Run Archy to import a flow
-      #Init Terraform and run it
       - name: Run Archy to import flow
-        env:
-          GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-          GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-          GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-          GENESYSCLOUD_REGION: "us-west-2"
-          GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
         run: |
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
           cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
-          #cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id'
           export GENESYS_FLOW_ID=$(cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id')
-          env | grep GENESYS_FLOW_ID
+
+      #Use the CLI to create the email domain route
+      - name: Run CLI to create email domain route
+        run: |
+          echo '{"pattern": "support", "from_name":"Financial Services Support", "from_email": "support@$GENESYSCLOUD_EMAIL_DOMAIN".$GENESYSCLOUD_EMAIL_DOMAIN_REGION"}'
+          #gc routing email domains routes create $GENESYSCLOUD_EMAIL_DOMAIN
+
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
       ## - name: Setup tmate session
