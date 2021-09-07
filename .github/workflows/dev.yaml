@@ -65,12 +65,13 @@ jobs:
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
           cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
-          export GENESYS_FLOW_ID=$(cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id')
+          export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id')
 
       #Use the CLI to create the email domain route
       - name: Run CLI to create email domain route
         run: |
-          echo "{'pattern': 'support', 'from_name':'Financial Services Support', 'from_email': 'support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}' 'flow': {'id': '${GENESYS_FLOW_ID}'}}" > /tmp/email_domain.json
+          echo "{'pattern': 'support', 'from_name':'Financial Services Support', 'from_email': 'support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}' 'flow': {'id': '${GENESYSCLOUD_FLOW_ID}'}}" | jq . > /tmp/email_domain.json
+          cat /tmp/email_domain.json
           #gc routing email domains routes create $GENESYSCLOUD_EMAIL_DOMAIN
 
       - name: Print Job Status
