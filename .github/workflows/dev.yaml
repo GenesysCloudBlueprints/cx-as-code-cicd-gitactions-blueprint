@@ -23,6 +23,8 @@ jobs:
       - name: Checkouts Source Code
         run: |
           mkdir output
+          pip install PureCloudPlatformClientV2
+
       #Install archy
       - name: Download and install archy
         run: |
@@ -35,12 +37,6 @@ jobs:
           cd ..
           pwd
           archy version
-
-      #Install CLI
-      - name: Download and install the Genesys Cloud CLI
-        run: |
-          curl -s https://sdk-cdn.mypurecloud.com/external/go-cli/linux/dl/install.sh | sudo bash
-          gc version
 
       #Install Terraform
       - name: Download and install terraform
@@ -67,7 +63,7 @@ jobs:
           cat $GITHUB_WORKSPACE/output/results.json
 
       #Use the CLI to create the email domain route
-      - name: Run CLI to create email domain route
+      - name: Add email domain route
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
           python $GITHUB_WORKSPACE/modules/email_flow/scripts/create_email_domain.py
