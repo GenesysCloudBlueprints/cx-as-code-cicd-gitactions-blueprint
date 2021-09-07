@@ -43,14 +43,6 @@ jobs:
           pwd
           archy version
 
-      # #Install Terraform
-      # - name: Download and install terraform
-      #   run: |
-      #     wget https://releases.hashicorp.com/terraform/1.0.6/terraform_1.0.6_linux_amd64.zip
-      #     unzip terraform_1.0.6_linux_amd64.zip
-      #     mv terraform /usr/local/bin
-      #     terraform version
-
       #Init Terraform and run it
       - name: Initialize terraform and run it
         run: |
@@ -63,7 +55,7 @@ jobs:
       - name: Run Archy to import flow
         run: |
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
-          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/output/results.json
+          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/output/results.json
           cat $GITHUB_WORKSPACE/output/results.json
 
       #Use the CLI to create the email domain route
@@ -71,6 +63,3 @@ jobs:
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
           python $GITHUB_WORKSPACE/modules/email_flow/scripts/create_email_domain.py
-      ## - name: Setup tmate session
-      #   uses:
-      #     mxschmitt/action-tmate@v3
