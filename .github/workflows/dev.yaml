@@ -6,18 +6,16 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  Setup-Environment:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Setup environment variables
-        env:
-          GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-          GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-          GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-          GENESYSCLOUD_REGION: "us-west-2"
-          GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
-        run: env | grep GENESYS
+    env:
+      GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
+      GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+      GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+      GENESYSCLOUD_REGION: "us-west-2"
+      GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
 
+    steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
       - name: Checkouts Source Code
@@ -36,22 +34,29 @@ jobs:
           pwd
           archy version
 
+      #Install archy
+      - name: Download and install archy
+        run: |
+          mkdir archy
+          cd archy
+          wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
+          unzip archy-linux.zip
+          . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
+          export PATH=$PATH:$GITHUB_WORKSPACE/archy
+          cd ..
+          pwd
+          archy version
+
       #Install Terraform
       - name: Download and install terraform
         run: |
-          wget https://releases.hashicorp.com/terraform/1.0.6/terraform_1.0.6_linux_amd64.zip
-          unzip terraform_1.0.6_linux_amd64.zip
+          curl -s https://sdk-cdn.mypurecloud.com/external/go-cli/linux/dl/install.sh | sudo bash
+          gc version
           mv terraform /usr/local/bin
           terraform version
 
       #Init Terraform and run it
       # - name: Initialize terraform and run it
-      #   env:
-      #     GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-      #     GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-      #     GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-      #     GENESYSCLOUD_REGION: "us-west-2"
-      #     GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       #   run: |
       #     env | grep GENESYS
       #     cd dev
@@ -62,12 +67,6 @@ jobs:
       #Run Archy to import a flow
       #Init Terraform and run it
       - name: Run Archy to import flow
-        env:
-          GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-          GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-          GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-          GENESYSCLOUD_REGION: "us-west-2"
-          GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
         run: |
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
