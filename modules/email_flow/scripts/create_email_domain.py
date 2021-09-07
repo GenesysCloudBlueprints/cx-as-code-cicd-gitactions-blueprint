@@ -40,5 +40,7 @@ def createEmailRoute():
     routingApi.post_routing_email_domain_routes(TARGET_DOMAIN + "." + TARGET_DOMAIN_NAME,body)
     print("Email route 'support' created for flow id: {}\n".format(FLOW_ID))
 
+time.sleep(10)
 deleteEmailRoute()
+time.sleep(10)
 createEmailRoute()
