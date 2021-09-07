@@ -75,9 +75,9 @@ jobs:
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
           cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
-          cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id'
-
-        # export GENESYS_FLOW_ID=$(echo "${content}"| jq -r '.output.flowInfo.id')
+          #cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id'
+          export GENESYS_FLOW_ID=$(cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id')
+          env | grep GENESYS_FLOW_ID
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
       ## - name: Setup tmate session
