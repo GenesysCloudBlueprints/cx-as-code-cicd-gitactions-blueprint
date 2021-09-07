@@ -1,0 +1,27 @@
+name: Genesys Cloud - CI/CD Example
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  Setup-Environment:
+    runs-on: ubuntu-latest
+    steps:
+      #Checks out the code out of the source control system and begins setup.
+      - uses: actions/checkout@v2
+      - name: Checkouts Source Code
+        run: ls -al $GITHUB_WORKSPACE
+      # - name: Run a multi-line script
+      # #   run: |
+      # #     echo Add other actions to build,
+      # #     echo test, and deploy your project.
+      # # - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+
+      #Lists all of the files in the workspace to makesure everything is good
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
