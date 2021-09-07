@@ -56,7 +56,7 @@ jobs:
         run: |
           cd dev
           terraform init
-          terraform apply --auto-approve -var="classifier_url=${{ env:GENESYSCLOUD_ML_CLASSIFIER_URL }}" -var="classifier_api_key=${{ env:GENESYSCLOUD_ML_CLASSIFIER_API_KEY }}"
+          terraform apply --auto-approve -var="classifier_url=$GENESYSCLOUD_ML_CLASSIFIER_URL" -var="classifier_api_key=$GENESYSCLOUD_ML_CLASSIFIER_API_KEY"
           cd ..
 
       #Run Archy to import a flow
@@ -71,9 +71,6 @@ jobs:
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
           python $GITHUB_WORKSPACE/modules/email_flow/scripts/create_email_domain.py
-
-      - name: Print Job Status
-        run: echo "🍏 This job's status is ${{ job.status }}."
       ## - name: Setup tmate session
       #   uses:
       #     mxschmitt/action-tmate@v3
