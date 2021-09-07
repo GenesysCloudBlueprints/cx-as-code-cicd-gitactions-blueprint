@@ -23,8 +23,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      - name: Checkouts Source Code
+      - name: Checkout code, setup output directory and install the python client
         run: |
           mkdir output
           pip install PureCloudPlatformClientV2
@@ -51,13 +50,12 @@ jobs:
       #     terraform version
 
       #Init Terraform and run it
-      # - name: Initialize terraform and run it
-      #   run: |
-      #     env | grep GENESYS
-      #     cd dev
-      #     terraform init
-      #     terraform apply --auto-approve
-      #     cd ..
+      - name: Initialize terraform and run it
+        run: |
+          cd dev
+          terraform init
+          terraform apply --auto-approve
+          cd ..
 
       #Run Archy to import a flow
       - name: Run Archy to import flow
