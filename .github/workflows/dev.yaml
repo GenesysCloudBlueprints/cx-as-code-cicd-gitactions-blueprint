@@ -14,7 +14,7 @@ jobs:
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
-      GENESYSCLOUD_EMAIL_DOMAIN: devengagedev"
+      GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
 
     steps:
