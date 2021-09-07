@@ -21,8 +21,7 @@ jobs:
           cd archy
           wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
           unzip archy-linux.zip
-          ls -al
-          . archy version
+          . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           cd ..
           pwd
