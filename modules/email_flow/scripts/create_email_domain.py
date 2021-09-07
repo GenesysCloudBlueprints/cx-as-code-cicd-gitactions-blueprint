@@ -10,7 +10,7 @@ CLIENT_REGION = os.environ["GENESYSCLOUD_REGION"]
 CLIENT_API_REGION = os.environ["GENESYSCLOUD_API_REGION"]
 FLOW_ID = os.environ["GENESYSCLOUD_FLOW_ID"]
 TARGET_DOMAIN = os.environ["TF_VAR_genesys_email_domain"]
-TARGET_DOMAIN_NAME = os.environ["TF_VAR_classifier_api_key"]
+TARGET_DOMAIN_NAME = os.environ["TF_VAR_genesys_email_domain_region"]
 FULL_ROUTE = TARGET_DOMAIN+ "." + TARGET_DOMAIN_NAME
 
 
