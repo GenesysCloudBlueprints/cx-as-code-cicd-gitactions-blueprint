@@ -70,7 +70,7 @@ jobs:
       #Use the CLI to create the email domain route
       - name: Run CLI to create email domain route
         run: |
-          echo "{'pattern': 'support', 'from_name':'Financial Services Support', 'from_email': 'support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}'}"
+          echo "{'pattern': 'support', 'from_name':'Financial Services Support', 'from_email': 'support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}' 'flow': {'id': '${GENESYS_FLOW_ID}'}}" > /tmp/email_domain.json
           #gc routing email domains routes create $GENESYSCLOUD_EMAIL_DOMAIN
 
       - name: Print Job Status
