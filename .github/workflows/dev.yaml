@@ -70,7 +70,7 @@ jobs:
           GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
         run: |
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
-          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile
+          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flows/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile
           cat $GITHUB_WORKSPACE/modules/scripts/output/results.json
 
       - name: Print Job Status
