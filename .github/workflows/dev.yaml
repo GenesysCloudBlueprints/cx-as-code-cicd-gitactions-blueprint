@@ -50,7 +50,7 @@ jobs:
 
       ##Terraform Apply
       - name: Apply the terraform scripts
-        run: terraform apply --auto-approve
+        run: ls -al && terraform apply --auto-approve
 
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
