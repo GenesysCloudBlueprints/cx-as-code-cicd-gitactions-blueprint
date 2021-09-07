@@ -71,7 +71,7 @@ jobs:
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id')
           env | grep GENESYSCLOUD_FLOW_ID 
-          echo "{'pattern': 'support', 'from_name':'Financial Services Support', 'from_email': 'support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}', 'flow': {'id': '${GENESYSCLOUD_FLOW_ID}'}}" 
+          echo "{\"pattern\": \"support\", \"from_name\":\"Financial Services Support\", \"from_email\": \"support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}\", \"flow\": {\"id\": \"${GENESYSCLOUD_FLOW_ID}\"}}" 
           #echo "{'pattern': 'support', 'from_name':'Financial Services Support', 'from_email': 'support@${GENESYSCLOUD_EMAIL_DOMAIN}.${GENESYSCLOUD_EMAIL_DOMAIN_REGION}', 'flow': {'id': '${GENESYSCLOUD_FLOW_ID}'}}" | jq . > /tmp/email_domain.json
           #cat /tmp/email_domain.json
           #gc routing email domains routes create $GENESYSCLOUD_EMAIL_DOMAIN
