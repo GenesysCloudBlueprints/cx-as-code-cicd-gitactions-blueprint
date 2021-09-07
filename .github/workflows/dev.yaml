@@ -71,6 +71,7 @@ jobs:
         run: |
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/scripts/EmailComprehendFlow.yaml --clientId {} --clientSecret {} --location {}  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/scripts/output/results.json
+          cat $GITHUB_WORKSPACE/modules/scripts/output/results.json
 
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
