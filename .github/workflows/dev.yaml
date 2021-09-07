@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  Setup-Environment:
+  Deploy-Email-flow:
     runs-on: ubuntu-latest
     env:
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
@@ -15,10 +15,6 @@ jobs:
       GENESYSCLOUD_REGION: "us-west-2"
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
     steps:
-      - name: Setup environment variables
-
-        run: env | grep GENESYS
-
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
       - name: Checkouts Source Code
@@ -79,6 +75,7 @@ jobs:
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
           cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
+          jq --version
 
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
