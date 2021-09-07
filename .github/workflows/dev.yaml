@@ -66,6 +66,7 @@ jobs:
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/email_flow/scripts/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
           cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/modules/email_flow/scripts/output/results.json | jq -r '.output.flowInfo.id')
+          env | grep GENESYSCLOUD_FLOW_ID
 
       #Use the CLI to create the email domain route
       - name: Run CLI to create email domain route
