@@ -8,16 +8,6 @@ terraform {
   }
 }
 
-
-#
-# Description:  
-#
-#
-#  Also assigns Ricky Bobby to each queue. 
-//TODO - Need to still track down why when I add ricky bobby and myself, I have to run the apply twice for Ricky Bobby to be picked up.  I suspect there
-//       is something going on with provider resources
-# 
-
 resource "genesyscloud_routing_queue" "Queues" {
   for_each                 = toset(var.classifier_queue_names)
   name                     = each.value
