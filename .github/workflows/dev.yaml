@@ -21,10 +21,11 @@ jobs:
           cd archy
           wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
           unzip archy-linux.zip
-          export PATH=$PATH:${{ github.workspace }}/archy
+          . archy version
+          export PATH=$PATH:$GITHUB_WORKSPACE/archy
           cd ..
           pwd
-          . archy version
+          archy version
 
       #Install Terraform
       - name: Download and install terraform
