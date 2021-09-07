@@ -9,6 +9,15 @@ jobs:
   Setup-Environment:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup environment variables
+        env:
+          GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
+          GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+          GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+          GENESYSCLOUD_REGION: "us-west-2"
+          GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+        run: env | grep GENESYS
+
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
       - name: Checkouts Source Code
