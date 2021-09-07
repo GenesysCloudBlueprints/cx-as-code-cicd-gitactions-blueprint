@@ -19,11 +19,11 @@ jobs:
         run: |
           mkdir archy
           cd archy
-          wget -q --show-progress  https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
+          wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
           unzip archy-linux.zip
-          pwd
-          ls -al
           ./archy version
+          pwd
+          ls -al 
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           cd ..
 
