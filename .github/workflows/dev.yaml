@@ -62,4 +62,4 @@ jobs:
       - name: Add email domain route
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
-          python $GITHUB_WORKSPACE/modules/email_flow/scripts/create_email_domain.py
+          python $GITHUB_WORKSPACE/scripts/create_email_domain.py
