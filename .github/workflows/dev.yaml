@@ -13,11 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Checkouts Source Code
         run: ls -al $GITHUB_WORKSPACE
-      # - name: Run a multi-line script
-      # #   run: |
-      # #     echo Add other actions to build,
-      # #     echo test, and deploy your project.
-      # # - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
 
       #Install archy
       - name: Download and install archy
@@ -25,9 +20,11 @@ jobs:
           mkdir archy
           cd archy
           wget https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
-          archy-linux.zip
-          export PATH=$PATH:$GITHUB_WORKSPACE/archy
+          pwd
           ls -al 
+          unzip archy-linux.zip
+          export PATH=$PATH:$GITHUB_WORKSPACE/archy
+
           cd ..
 
       #Lists all of the files in the workspace to makesure everything is good
