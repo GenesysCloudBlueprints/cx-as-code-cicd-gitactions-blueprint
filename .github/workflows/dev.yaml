@@ -21,16 +21,18 @@ jobs:
           cd archy
           wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
           unzip archy-linux.zip
-          . archy version
-          export PATH=$PATH:$GITHUB_WORKSPACE/archy
+          export PATH=$PATH:${{ github.workspace }}/archy
           cd ..
           pwd
           . archy version
 
-      #Lists all of the files in the workspace to makesure everything is good
-      - name: List files in the repository
+      #Install Terraform
+      - name: Download and install terraform
         run: |
-          ls ${{ github.workspace }}
+          wget https://releases.hashicorp.com/terraform/0.14.10/terraform_0.14.10_linux_amd64.zip
+          unzip terraform_0.14.10_linux_amd64.zip
+          mv terraform /usr/local/bin
+          terraform version
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
       # - name: Setup tmate session
