@@ -1,0 +1,168 @@
+inboundEmail:
+  name: EmailAWSComprehendFlow
+  description: AWS Comprehend Flow where email is sent to AWS Comprehend for classification
+  startUpRef: "/inboundEmail/states/state[Initial State_11]"
+  defaultLanguage: en-us
+  supportedLanguages:
+    en-us:
+      defaultLanguageSkill:
+        noValue: true
+  settingsInboundEmailHandling:
+    emailHandling:
+      disconnect:
+        none: true
+  settingsErrorHandling:
+    errorHandling:
+      disconnect:
+        none: true
+  states:
+    - state:
+        name: Initial State
+        refId: Initial State_11
+        variables:
+          - stringVariable:
+              name: State.QueueId
+              initialValue:
+                noValue: true
+          - stringVariable:
+              name: State.QueueName
+              initialValue:
+                noValue: true
+          - queueVariable:
+              name: State.QueueToTransferTo
+              initialValue:
+                noValue: true
+        actions:
+          - callData:
+              name: Call Data Action
+              category:
+                ComprehendDataAction:
+                  dataAction:
+                    LookupQueueName:
+                      inputs:
+                        EmailBody:
+                          exp: Email.Message.body
+                        EmailSubject:
+                          exp: Email.Message.subject
+                      successOutputs:
+                        QueueName:
+                          var: State.QueueName
+                      failureOutputs:
+                        errorCode:
+                          var: State.ErrorCode
+                        status:
+                          noValue: true
+                        correlationId:
+                          var: State.correlationId
+                        entityId:
+                          noValue: true
+                        entityName:
+                          noValue: true
+                        userMessage:
+                          noValue: true
+                        userParamsMessage:
+                          noValue: true
+                        userParams.key:
+                          noValue: true
+                        userParams.value:
+                          noValue: true
+                        details.errorCode:
+                          noValue: true
+                        details.fieldName:
+                          noValue: true
+                        details.entityId:
+                          noValue: true
+                        details.entityName:
+                          noValue: true
+              outputs:
+                success:
+                  actions:
+                    - sendAutoReply:
+                        name: Send Auto Reply
+                        from:
+                          noValue: true
+                        replyTo:
+                          noValue: true
+                        cc:
+                          noValue: true
+                        bcc:
+                          noValue: true
+                        messageBody:
+                          exp: "Trim(Append(\n    \"QUEUE NAME:\", \n    \" \", \n    ToDisplayString(State.QueueName)))"
+                        replyMode: replyToSender
+                    - findQueue:
+                        name: Find Queue
+                        findName:
+                          exp: State.QueueName
+                        findResult:
+                          var: State.QueueToTransferTo
+                failure:
+                  actions:
+                    - sendAutoReply:
+                        name: Send Auto Reply
+                        from:
+                          noValue: true
+                        replyTo:
+                          noValue: true
+                        cc:
+                          noValue: true
+                        bcc:
+                          noValue: true
+                        messageBody:
+                          exp: '"I have a complete failure"'
+                        replyMode: replyToSender
+                timeout:
+                  actions:
+                    - sendAutoReply:
+                        name: Send Auto Reply
+                        from:
+                          noValue: true
+                        replyTo:
+                          noValue: true
+                        cc:
+                          noValue: true
+                        bcc:
+                          noValue: true
+                        messageBody:
+                          exp: '"I have a timeout"'
+                        replyMode: replyToSender
+          - decision:
+              name: Got a queue to transfer to?
+              condition:
+                exp: IsSet(State.QueueToTransferTo)
+              outputs:
+                no:
+                  actions:
+                    - updateData:
+                        name: Set default queue
+                        statements:
+                          - queue:
+                              variable: State.QueueToTransferTo
+                              value:
+                                lit:
+                                  name: GeneralSupport
+          - sendAutoReply:
+              name: Send Auto Reply
+              from:
+                noValue: true
+              replyTo:
+                noValue: true
+              cc:
+                noValue: true
+              bcc:
+                noValue: true
+              messageBody:
+                exp: "Trim(Append(\n    \"Hi Thanks for reaching out to uss.  You will be sent to the \", \n    \" \", \n    ToDisplayString(State.QueueToTransferTo), \n    If(IsNotSetOrEmpty(ToDisplayString(State.QueueToTransferTo)), \"\", \" \"), \n    \"Have a nice day!\"))"
+              replyMode: replyToSender
+          - transferToAcd:
+              name: Transfer to ACD
+              targetQueue:
+                exp: State.QueueToTransferTo
+              priority:
+                lit: 0
+              preferredAgents:
+                noValue: true
+              languageSkill:
+                noValue: true
+              appendSkills:
+                lit: true
