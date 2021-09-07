@@ -59,6 +59,18 @@ jobs:
           terraform apply --auto-approve
           cd ..
 
+      #Run Archy to import a flow
+      #Init Terraform and run it
+      - name: Run Archy to import flow
+        env:
+          GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
+          GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+          GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+          GENESYSCLOUD_REGION: "us-west-2"
+          GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+        run: |
+          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/modules/scripts/EmailComprehendFlow.yaml --clientId {} --clientSecret {} --location {}  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/modules/scripts/output/results.json
+
       - name: Print Job Status
         run: echo "🍏 This job's status is ${{ job.status }}."
       # - name: Setup tmate session
