@@ -22,10 +22,13 @@ jobs:
           wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
           unzip archy-linux.zip
           ./archy version
-          pwd
-          ls -al 
-          export PATH=$PATH:$GITHUB_WORKSPACE/archy
-          cd ..
+      - name: Setup tmate session
+        uses:
+          mxschmitt/action-tmate@v3
+          # pwd
+          # ls -al
+          # export PATH=$PATH:$GITHUB_WORKSPACE/archy
+          # cd ..
 
       #Lists all of the files in the workspace to makesure everything is good
       - name: List files in the repository
