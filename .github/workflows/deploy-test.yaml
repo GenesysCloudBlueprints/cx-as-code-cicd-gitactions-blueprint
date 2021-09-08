@@ -1,9 +1,5 @@
 name: Genesys Cloud Email Test
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 jobs:
   deploy-email-flow-test:
