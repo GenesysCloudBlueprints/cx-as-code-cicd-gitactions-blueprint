@@ -4,7 +4,7 @@ terraform {
     organization = "thoughtmechanix"
 
     workspaces {
-      name = "genesys_email_dev"
+      name = "genesys_email_test"
     }
   }
 
