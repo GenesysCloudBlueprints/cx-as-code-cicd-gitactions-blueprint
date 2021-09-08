@@ -1,4 +1,4 @@
-name: Genesys Cloud - CI/CD Example
+name: Genesys Cloud Email Dev
 on:
   push:
     branches: [main]
@@ -6,7 +6,7 @@ on:
     branches: [main]
   workflow_dispatch:
 jobs:
-  Deploy-Email-flow:
+  deploy-email-flow-dev:
     runs-on: ubuntu-latest
     env:
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
