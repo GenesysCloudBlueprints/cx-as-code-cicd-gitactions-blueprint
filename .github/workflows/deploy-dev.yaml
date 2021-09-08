@@ -44,7 +44,7 @@ jobs:
           archy version
 
       #Init Terraform and run it
-      - name: Initialize terraform and run its
+      - name: Initialize terraform and run it
         run: |
           cd dev 
           terraform init 
