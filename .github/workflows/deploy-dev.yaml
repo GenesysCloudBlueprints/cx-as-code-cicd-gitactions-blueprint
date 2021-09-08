@@ -46,8 +46,10 @@ jobs:
       #Init Terraform and run it
       - name: Initialize terraform and run it
         run: |
+          cd dev 
           terraform init 
           terraform apply --auto-approve
+          cd ..
 
       #Run Archy to import a flow
       - name: Run Archy to import flow
