@@ -47,7 +47,7 @@ jobs:
       - name: Initialize terraform and run it
         run: |
           terraform init -reconfigure 
-          terraform --chdir=dev apply --auto-approve
+          terraform -chdir=dev apply --auto-approve
       #Run Archy to import a flow
       - name: Run Archy to import flow
         run: |
