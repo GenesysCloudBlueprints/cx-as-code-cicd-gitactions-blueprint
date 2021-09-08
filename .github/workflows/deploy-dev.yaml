@@ -47,7 +47,6 @@ jobs:
       - name: Initialize terraform and run it
         run: |
           cd dev
-          terraform init
           terraform apply --auto-approve
           cd ..
 
