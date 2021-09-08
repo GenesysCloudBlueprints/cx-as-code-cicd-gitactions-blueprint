@@ -13,9 +13,3 @@ jobs:
     steps:
       - name: Successful deploy
         run: echo "BUILD DEPLOYED TO DEV  SUCCESSFULLY, KICKING OFF SMOKE TESTS"
-  on-failure:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - name: Failed deploy
-        run: echo "BUILD FAILED TO DEPLOY SUCCESSFULLY, KICKING OFF SMOKE TESTS"

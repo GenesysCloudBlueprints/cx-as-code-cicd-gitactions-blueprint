@@ -65,9 +65,3 @@ jobs:
         run: |
           export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
           python $GITHUB_WORKSPACE/scripts/create_email_domain.py
-  on-smoke-test-failure:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
-    steps:
-      - name: Failed smoke-test
-        run: echo "SMOKE TESTS FAILED, TEST DEPLOY WILL NOT OCCUR"
