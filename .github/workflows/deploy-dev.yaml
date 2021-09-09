@@ -18,7 +18,6 @@ jobs:
       TF_VAR_genesys_email_domain_region: "pure.cloud"
       TF_VAR_classifier_url: "https://lw5n6y5cfe.execute-api.us-east-1.amazonaws.com/dev/emailresolver"
       TF_VAR_classifier_api_key: ${{ secrets.GENESYSCLOUD_CLASSIFIER_API_KEY }}
-
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
@@ -57,7 +56,7 @@ jobs:
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           archy publish --forceUnlock --file=$GITHUB_WORKSPACE/flows/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/output/results.json
           cat $GITHUB_WORKSPACE/output/results.json
-
+          
       #Use the CLI to create the email domain route
       - name: Add email domain route
         run: |
