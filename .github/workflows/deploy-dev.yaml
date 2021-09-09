@@ -47,7 +47,7 @@ jobs:
         run: |
           cd dev 
           terraform init 
-          terraform apply --auto-approve -var="genesys_email_domain=$TF_VAR_genesys_email_domain" -var="genesys_email_domain_region=$TF_VAR_genesys_email_domain_region" -var="classifier_url=$ TF_VAR_classifier_url" -var="classifier_api_key=${{ secrets.GENESYSCLOUD_CLASSIFIER_API_KEY }}"
+          terraform apply --auto-approve
           cd ..
 
       #Run Archy to import a flow
