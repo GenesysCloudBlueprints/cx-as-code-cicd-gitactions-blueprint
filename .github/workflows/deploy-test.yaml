@@ -10,15 +10,14 @@ jobs:
   deploy-email-flow-test:
     runs-on: ubuntu-latest
     env:
+      ## Used by archy and the python scripts
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_TEST }}
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST }}
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
-      TF_VAR_genesys_email_domain: "devengagetest"
-      TF_VAR_genesys_email_domain_region: "pure.cloud"
-      TF_VAR_classifier_url: "https://lw5n6y5cfe.execute-api.us-east-1.amazonaws.com/dev/emailresolver"
-      TF_VAR_classifier_api_key: ${{ secrets.GENESYSCLOUD_CLASSIFIER_API_KEY }}
+      GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest"
+      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
 
     #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
