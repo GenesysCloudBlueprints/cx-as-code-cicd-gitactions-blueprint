@@ -16,7 +16,7 @@ terraform {
 }
 
 provider "genesyscloud" {
-  #sdk_debug = true
+  sdk_debug = true
 }
 
 module "classifier_users" {
