@@ -1,4 +1,4 @@
-name: Genesys Cloud Email Dev
+name: Genesys Cloud Email Non-Prod Deploy
 on:
   push:
     branches: [main]
