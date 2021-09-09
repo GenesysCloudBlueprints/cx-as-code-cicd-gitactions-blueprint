@@ -13,7 +13,7 @@ resource "genesyscloud_routing_queue" "Queues" {
   name                     = each.value
   description              = "${each.value} questions and answers"
   acw_wrapup_prompt        = "MANDATORY_TIMEOUT"
-  acw_timeout_ms           = 200000
+  acw_timeout_ms           = 300000
   skill_evaluation_method  = "BEST"
   auto_answer_only         = true
   enable_transcription     = true
