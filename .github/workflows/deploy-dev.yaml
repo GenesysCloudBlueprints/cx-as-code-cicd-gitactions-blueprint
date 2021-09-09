@@ -47,7 +47,7 @@ jobs:
         run: |
           cd dev 
           env | grep TF_ > pipeline.auto.tfvars
-          cat 
+          cat pipeline.auto.tfvars
           terraform init 
           terraform apply --auto-approve
           cd ..
