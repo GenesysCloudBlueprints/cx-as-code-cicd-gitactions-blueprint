@@ -46,10 +46,8 @@ jobs:
       - name: Initialize terraform and run it
         run: |
           cd dev 
-          env | grep TF_ > pipeline.auto.tfvars
-          cat pipeline.auto.tfvars
           terraform init 
-          terraform apply --auto-approve
+          terraform apply --auto-approve -var="genesys_email_domain=$TF_VAR_genesys_email_domain" -var="genesys_email_domain_region=$TF_VAR_genesys_email_domain_region" -var="classifier_url=$ TF_VAR_classifier_url" -var="classifier_api_key=${{ secrets.GENESYSCLOUD_CLASSIFIER_API_KEY }}"
           cd ..
 
       #Run Archy to import a flow
