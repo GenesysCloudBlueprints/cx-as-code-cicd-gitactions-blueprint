@@ -46,7 +46,8 @@ jobs:
       - name: Initialize terraform and run it
         run: |
           cd dev 
-          env | grep TF 
+          env | grep TF_ > pipeline.auto.tfvars
+          cat 
           terraform init 
           terraform apply --auto-approve
           cd ..
