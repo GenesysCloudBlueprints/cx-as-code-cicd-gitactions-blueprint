@@ -68,10 +68,9 @@ jobs:
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
     steps:
+      - uses: actions/checkout@v2
       - name: Platform tests
         run: |
-          pwd
-          ls -al scripts
           python scripts/platform_tests.py
   deploy-email-flow-test:
     runs-on: ubuntu-latest
