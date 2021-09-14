@@ -71,6 +71,7 @@ jobs:
       - name: Platform tests
         run: |
           pwd
+          ls -al scripts
           python scripts/platform_tests.py
   deploy-email-flow-test:
     runs-on: ubuntu-latest
