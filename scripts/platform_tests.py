@@ -20,13 +20,19 @@ def findQueue(queueName):
     #print(results.entities)
     return results.entities[0]
   else: 
-    return nil
+    return None
+
 
 def checkQueues():
   ira = findQueue("IRAZ")
   K401 = findQueue("401K") 
   CS529 = findQueue("529") 
   GS    = findQueue("GeneralSupport")   
+  
+  assert (ira==None)==False
+  assert (K401==None)==False
+  assert (CS529==None)==False
+  assert (GS==None)==False
   
   assert (ira.name=="IRA")==True,   "Retrieved IRA queue name does not match"
   assert (K401.name=="401K")==True, "Retrieved 401K queue name does not match"
