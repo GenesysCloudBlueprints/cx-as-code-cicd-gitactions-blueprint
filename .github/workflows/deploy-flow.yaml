@@ -67,6 +67,7 @@ jobs:
     env:
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+      GENESYSCLOUD_REGION: "us-west-2"
     steps:
       - uses: actions/checkout@v2
       - name: Platform tests
