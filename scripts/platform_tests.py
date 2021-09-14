@@ -23,7 +23,7 @@ def findQueue(queueName):
     return nil
 
 def checkQueues():
-  ira = findQueue("IRA")
+  ira = findQueue("IRAZ")
   K401 = findQueue("401K") 
   CS529 = findQueue("529") 
   GS    = findQueue("GeneralSupport")   
