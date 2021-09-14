@@ -71,6 +71,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Platform tests
         run: |
+          pip install PureCloudPlatformClientV2
           python scripts/platform_tests.py
   deploy-email-flow-test:
     runs-on: ubuntu-latest
@@ -105,7 +106,6 @@ jobs:
           . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
           export PATH=$PATH:$GITHUB_WORKSPACE/archy
           cd ..
-          pwd
           archy version
 
       #Init Terraform and run it
