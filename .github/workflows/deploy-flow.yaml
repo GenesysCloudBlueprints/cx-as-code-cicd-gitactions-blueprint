@@ -20,15 +20,14 @@ jobs:
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
-      - uses: hashicorp/setup-terraform@v1
       - uses: actions/setup-genesys-cloud-tools
+      - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: Checkout code, setup output directory and install the python client
         run: |
           mkdir output
-          #pip install PureCloudPlatformClientV2
-
+        #pip install PureCloudPlatformClientV2
       #Install archy
       - name: Download and install archy
         run: |
