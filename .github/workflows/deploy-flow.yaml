@@ -20,26 +20,10 @@ jobs:
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/genesys-cloud-tools
+      - uses: ./.github/actions/genesys-cloud-dev-tools
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Create the output directory
-        run: |
-          mkdir output
-
-      #Install archy
-      # - name: Download and install archy
-      #   run: |
-      #     mkdir archy
-      #     cd archy
-      #     wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
-      #     unzip archy-linux.zip
-      #     . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
-      #     export PATH=$PATH:$GITHUB_WORKSPACE/archy
-      #     cd ..
-      #     pwd
-      #     archy version
 
       #Init Terraform and run it
       - name: Initialize terraform and run it
@@ -71,10 +55,9 @@ jobs:
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/genesys-cloud-dev-tools
       - name: Platform tests
-        run: |
-          pip install PureCloudPlatformClientV2
-          python scripts/platform_tests.py
+        run: python scripts/platform_tests.py
   deploy-email-flow-test:
     runs-on: ubuntu-latest
     needs: execute-platform-tests
@@ -90,26 +73,11 @@ jobs:
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/genesys-cloud-dev-tools
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Checkout code, setup output directory and install the python client
-        run: |
-          mkdir output
-          pip install PureCloudPlatformClientV2
-
-      #Install archy
-      - name: Download and install archy
-        run: |
-          mkdir archy
-          cd archy
-          wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
-          unzip archy-linux.zip
-          . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
-          export PATH=$PATH:$GITHUB_WORKSPACE/archy
-          cd ..
-          archy version
-
+    
       #Init Terraform and run it
       - name: Initialize terraform and run it
         run: |

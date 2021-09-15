@@ -5,6 +5,7 @@ runs:
   steps:
     - run: |
         pip install PureCloudPlatformClientV2
+        mkdir output
         mkdir archy
         cd archy
         wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
