@@ -3,7 +3,17 @@ description: "Installs Archy and the Genesys Cloud CLI"
 runs:
   using: "composite"
   steps:
-    - run: pip install PureCloudPlatformClientV2
+    - run: |
+        pip install PureCloudPlatformClientV2
+        mkdir archy
+        cd archy
+        wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
+        unzip archy-linux.zip
+        . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
+        export PATH=$PATH:$GITHUB_WORKSPACE/archy
+        cd ..
+        pwd
+        archy version
       shell: bash
     # - id: random-number-generator
     #   run: echo "::set-output name=random-id::$(echo $RANDOM)"
