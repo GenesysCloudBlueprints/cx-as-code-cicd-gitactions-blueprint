@@ -78,7 +78,7 @@ jobs:
           python scripts/platform_tests.py
   deploy-email-flow-test:
     runs-on: ubuntu-latest
-    needs: execute-smoke-tests
+    needs: execute-platform-tests
     env:
       ## Used by archy and the python scripts
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_TEST }}
