@@ -18,7 +18,6 @@ def findQueue(queueName):
   results = routingApi.get_routing_queues(name=queueName)
 
   if len(results.entities)==1:
-    #print(results.entities)
     return results.entities[0]
   else: 
     return None
@@ -48,7 +47,7 @@ def checkQueues():
   assert (GS.name=="GeneralSupport")==True, "Retrieved IRA queue name does not match"  
 
 def checkIntegrationAction():
-  comprehendDataAction = findIntegrationAction("ComprehendDataAction")  
+  comprehendDataAction = findIntegrationAction("LookupQueueName")  
 
   assert not(comprehendDataAction is None)
 
