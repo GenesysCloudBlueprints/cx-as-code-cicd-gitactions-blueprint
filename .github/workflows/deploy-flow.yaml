@@ -24,10 +24,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: Checkout code, setup output directory and install the python client
+      - name: Create the output directory
         run: |
           mkdir output
-        #pip install PureCloudPlatformClientV2
+
       #Install archy
       # - name: Download and install archy
       #   run: |
