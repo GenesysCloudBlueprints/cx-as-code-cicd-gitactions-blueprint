@@ -1,7 +1,5 @@
 name: "Setup Genesys Cloud Tools"
 description: "Installs Archy and the Genesys Cloud CLI"
-inputs:
-outputs:
 runs:
   using: "composite"
   steps:
