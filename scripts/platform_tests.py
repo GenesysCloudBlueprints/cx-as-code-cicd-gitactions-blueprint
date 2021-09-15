@@ -25,7 +25,7 @@ def findQueue(queueName):
 
 def checkQueues():
   ira = findQueue("IRA")
-  K401 = findQueue("401K") 
+  K401 = findQueue("401S") 
   CS529 = findQueue("529") 
   GS    = findQueue("GeneralSupport")   
   
