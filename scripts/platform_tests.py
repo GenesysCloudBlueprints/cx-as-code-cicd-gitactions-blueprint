@@ -29,10 +29,10 @@ def checkQueues():
   CS529 = findQueue("529") 
   GS    = findQueue("GeneralSupport")   
   
-  assert (ira==None)==False
-  assert (K401==None)==False
-  assert (CS529==None)==False
-  assert (GS==None)==False
+  assert (ira is None)==False
+  assert (K401 is None)==False
+  assert (CS529 is None)==False
+  assert (GS is None)==False
   
   assert (ira.name=="IRA")==True,   "Retrieved IRA queue name does not match"
   assert (K401.name=="401K")==True, "Retrieved 401K queue name does not match"
