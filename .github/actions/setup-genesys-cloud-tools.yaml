@@ -1,0 +1,14 @@
+name: "Setup Genesys Cloud Tools"
+description: "Installs Archy and the Genesys Cloud CLI"
+inputs:
+outputs:
+runs:
+  using: "composite"
+  steps:
+    - run: pip install PureCloudPlatformClientV2
+      shell: bash
+    # - id: random-number-generator
+    #   run: echo "::set-output name=random-id::$(echo $RANDOM)"
+    #   shell: bash
+    # - run: ${{ github.action_path }}/goodbye.sh
+    #   shell: bash
