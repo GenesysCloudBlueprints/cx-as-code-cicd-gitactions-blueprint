@@ -24,7 +24,7 @@ def findQueue(queueName):
     return None
 
 def findIntegrationAction(actionName):
-  results = integrationsApi.get_integrations_action(name=actionName)
+  results = integrationsApi.get_integrations_actions(name=actionName)
 
   if len(results.entities)==1:
     return results.entities[0]
