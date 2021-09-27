@@ -21,9 +21,23 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Include override files you do wish to add to version control using negated pattern
-#
-# !example_override.tf
+# package directories
+node_modules
+jspm_packages
 
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack
+
+# Terraform files
+.terraform
+.terraform.lock.hcl
+
+# .env
+.env.dev
+.env.local
+
+#Archy results 
+components/genesys-email-flow/modules/email_flow/scripts/output/results.json

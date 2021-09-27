@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\r\n    \"EmailSubject\": \"Question about retirement savings\",\r\n    \"EmailBody\": \"Hi guys,\\r\\n\\r\\nI was just looking through my 401K.  I have a couple of questions?\\r\\n \\r\\n  Whats a difference between a ROTH and traditional 401K?\\r\\nWhats the limit for being able to contribute to a 401K every year?\\r\\nIs there a catchup period for 401K?  Is it 50 years of age.  Is there a required minimum distribution at age 50.\\r\\n \\r\\n \\r\\nThanks,\\r\\n    John Carnell\\r\\n\"\r\n}"
+}
