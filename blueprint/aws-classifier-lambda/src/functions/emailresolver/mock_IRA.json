@@ -1,0 +1,6 @@
+{
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\r\n    \"EmailSubject\": \"Looking at setting up an IRA\",\r\n    \"EmailBody\": \"Hi guys,\\r\\n\\r\\nI have some questions about my IRA?  \\r\\n\\r\\n1.  Can I rollover my existing 401K to my IRA.  \\r\\n2.  Is an IRA tax-deferred? \\r\\n3.  Can I make contributions from my IRA to a charitable organization?\\r\\n4.  Am I able to borrow money from my IRA?\\r\\n5.  What is the minimum age I have to be to start taking money out of my IRA?\\r\\n\\r\\nThanks,\\r\\n   John\"\r\n}"
+}
