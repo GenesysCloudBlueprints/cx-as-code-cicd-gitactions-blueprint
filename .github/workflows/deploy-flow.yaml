@@ -18,21 +18,12 @@ jobs:
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "dev"
     steps:
-      # Step 1: Checkout code
       - uses: actions/checkout@v2
-
-      # Step 2: Use local action to install Genesys Python SDK and Archy
       - uses: ./.github/actions/genesys-cloud-dev-tools
-
-      # Step 3: Install Terrform and configure it
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      # Step 4: Init Terraform and run the Terraform with CX as Code Objects
       - uses: ./.github/actions/genesys-cloud-apply-terraform
-
-      # Step 5: Use location action to publish Archy flow
       - uses: ./.github/actions/genesys-cloud-publish-archy-flow
 
       #Use the Python to create the email domain route
