@@ -152,7 +152,7 @@ inboundEmail:
               bcc:
                 noValue: true
               messageBody:
-                exp: "Trim(Append(\n    \"Hi Thanks for reaching out to uss.  You will be sent to the \", \n    \" \", \n    ToDisplayString(State.QueueToTransferTo), \n    If(IsNotSetOrEmpty(ToDisplayString(State.QueueToTransferTo)), \"\", \" \"), \n    \"Have a nice day!\"))"
+                exp: "Trim(Append(\n    \"Hi Thanks for reaching out to us.  You will be sent to the \", \n    \" \", \n    ToDisplayString(State.QueueToTransferTo), \n    If(IsNotSetOrEmpty(ToDisplayString(State.QueueToTransferTo)), \"\", \" \"), \n    \"Have a nice day!\"))"
               replyMode: replyToSender
           - transferToAcd:
               name: Transfer to ACD
