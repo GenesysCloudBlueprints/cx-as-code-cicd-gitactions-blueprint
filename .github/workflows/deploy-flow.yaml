@@ -17,7 +17,6 @@ jobs:
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
-      TF_WORKSPACE: "genesys_email_dev"
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
@@ -25,6 +24,8 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        env:
+          TF_WORKSPACE: "genesys_email_dev"
 
       #Init Terraform and run it
       - name: Initialize terraform and run it
@@ -71,7 +72,6 @@ jobs:
       GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
-      TF_WORKSPACE: "genesys_email_test"
     steps:
       #Checks out the code out of the source control system and begins setup.
       - uses: actions/checkout@v2
@@ -79,6 +79,8 @@ jobs:
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        env:
+          TF_WORKSPACE: "genesys_email_test"
 
       #Init Terraform and run it
       - name: Initialize terraform and run it
