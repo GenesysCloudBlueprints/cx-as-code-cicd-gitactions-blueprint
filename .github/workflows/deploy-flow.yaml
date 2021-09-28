@@ -28,11 +28,10 @@ jobs:
       #Init Terraform and run it
       - name: Initialize terraform and run it
         run: |
-          ls -al
-          cd genesys-cloud-cx-as-code
+          cd blueprint/genesys-cloud-cx-as-code
           terraform init 
           terraform apply --auto-approve
-          cd ..
+          cd ../..
 
       #Run Archy to import a flow
       - name: Run Archy to import flow
