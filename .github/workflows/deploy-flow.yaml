@@ -67,19 +67,22 @@ jobs:
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "test"
     steps:
-      - uses: actions/checkout@v2 # Step 1: Checkout code
-      - uses: ./.github/actions/genesys-cloud-dev-tools # Step 2: Use local action to install Genesys Python SDK and Archy
-      - uses: hashicorp/setup-terraform@v1 # Step 3: Install Terrform and configure it
+      # Step 1: Checkout code
+      - uses: actions/checkout@v2
+
+      # Step 2: Use local action to install Genesys Python SDK and Archy
+      - uses: ./.github/actions/genesys-cloud-dev-tools
+
+      # Step 3: Install Terrform and configure it
+      - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - uses: ./.github/actions/genesys-cloud-apply-terraform # Step 4: Init Terraform and run the Terraform with CX as Code Objects
 
-      #Run Archy to import a flow
-      - name: Run Archy to import flow
-        run: |
-          export PATH=$PATH:$GITHUB_WORKSPACE/archy
-          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/output/results.json
-          cat $GITHUB_WORKSPACE/output/results.json
+      # Step 4: Init Terraform and run the Terraform with CX as Code Objects
+      - uses: ./.github/actions/genesys-cloud-apply-terraform
+
+      # Step 5: Use location action to publish Archy flow
+      - uses: ./.github/actions/genesys-cloud-publish-archy-flow
 
       #Use the CLI to create the email domain route
       - name: Add email domain route
