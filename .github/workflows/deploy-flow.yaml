@@ -19,21 +19,12 @@ jobs:
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "dev"
     steps:
-      #Checks out the code out of the source control system and begins setup.
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/genesys-cloud-dev-tools
-      - uses: hashicorp/setup-terraform@v1
+      - uses: actions/checkout@v2 # Step 1: Checkout code
+      - uses: ./.github/actions/genesys-cloud-dev-tools # Step 2: Use local action to install Genesys Python SDK and Archy
+      - uses: hashicorp/setup-terraform@v1 # Step 3: Install Terrform and configure it
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      #Init Terraform and run it
-      - uses: ./.github/actions/genesys-cloud-apply-terraform
-
-        # run: |
-        #   cd blueprint/genesys-cloud-cx-as-code
-        #   terraform init
-        #   terraform apply --auto-approve
-        #   cd ../..
+      - uses: ./.github/actions/genesys-cloud-apply-terraform # Step 4: Init Terraform and run the Terraform with CX as Code Objects
       #Run Archy to import a flow
       - name: Run Archy to import flow
         run: |
@@ -73,20 +64,12 @@ jobs:
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "test"
     steps:
-      #Checks out the code out of the source control system and begins setup.
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/genesys-cloud-dev-tools
-      - uses: hashicorp/setup-terraform@v1
+      - uses: actions/checkout@v2 # Step 1: Checkout code
+      - uses: ./.github/actions/genesys-cloud-dev-tools # Step 2: Use local action to install Genesys Python SDK and Archy
+      - uses: hashicorp/setup-terraform@v1 # Step 3: Install Terrform and configure it
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      #Init Terraform and run it
-      - name: Initialize terraform and run it
-        run: |
-          cd genesys-cloud-cx-as-code
-          terraform init
-          terraform apply --auto-approve
-          cd ..
+      - uses: ./.github/actions/genesys-cloud-apply-terraform # Step 4: Init Terraform and run the Terraform with CX as Code Objects
 
       #Run Archy to import a flow
       - name: Run Archy to import flow
