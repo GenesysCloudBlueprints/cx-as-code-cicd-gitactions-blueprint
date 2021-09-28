@@ -2,10 +2,6 @@ terraform {
 
   backend "remote" {
     organization = "thoughtmechanix"
-
-    workspaces {
-      name = "genesys_email_dev"
-    }
   }
 
   required_providers {
