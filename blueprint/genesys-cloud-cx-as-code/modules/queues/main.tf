@@ -8,6 +8,14 @@ terraform {
   }
 }
 
+###
+#
+#  Description:
+#  
+#  Dynamically creates queues based on the classifier_queue_names variable passed into module.  
+#  This module demonstrates how Terraform can be used to create several objects using their scripting
+#  language.
+###
 resource "genesyscloud_routing_queue" "Queues" {
   for_each                 = toset(var.classifier_queue_names)
   name                     = each.value

@@ -1,3 +1,12 @@
+###
+#  This action changes to the where the Terraform files are located and then executes a Terraform init
+#  and a terraform apply with an auto-approve.
+#
+#  It should be noted that in our example here we are using Terraform cloud as a back end with individual
+#  workspaces for each environment. This is set in the Terraform script that is being executed
+#  (e.g.  $GITHUB_WORKSPACE/blueprint/genesys-cloud-cx-as-code).
+#
+###
 name: "Invoke Terraform with Auto Apply"
 description: "Invoke Terraform with Auto Apply"
 runs:
@@ -5,8 +14,6 @@ runs:
   steps:
     - run: |
         cd $GITHUB_WORKSPACE/blueprint/genesys-cloud-cx-as-code
-        pwd
-        ls -al 
         terraform init 
         terraform apply --auto-approve
         cd $GITHUB_WORKSPACE

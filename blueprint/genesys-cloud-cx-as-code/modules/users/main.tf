@@ -8,12 +8,13 @@ terraform {
   }
 }
 
-#
+###
 # Description:  
+#
 # Setup a single user called Sheldon Cooper.  This type of setup is fine if you want to correct setup and provision users for a demo or dev environment.
 # However, I would highly recommend against doing this as a mechanism to provision users and map their roles.  These things tend to by dynamic and should be managed as 
 # scripts instead of through a DevOps style tool.
-# 
+###
 resource "genesyscloud_user" "sheldoncooper_agent" {
   email           = "sheldon.cooper@neverreal.demo.com"
   name            = "Sheldon Cooper"

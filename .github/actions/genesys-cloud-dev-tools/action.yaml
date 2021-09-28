@@ -1,3 +1,8 @@
+###
+#  This action installs the Genesys Cloud python SDK and then installs archy.
+#  It also adds Archy to the path
+#
+###
 name: "Setup Genesys Cloud Tools"
 description: "Installs Archy and the Genesys Cloud CLI"
 runs:
@@ -10,10 +15,9 @@ runs:
         cd archy
         wget -q https://sdk-cdn.mypurecloud.com/archy/latest/archy-linux.zip
         unzip archy-linux.zip
-        . archy version                              #Need this command because archy replaces the path in the the file the first time it is run
+        . archy version                            
         export PATH=$PATH:$GITHUB_WORKSPACE/archy
         cd ..
         pwd
         archy version
       shell: bash
-

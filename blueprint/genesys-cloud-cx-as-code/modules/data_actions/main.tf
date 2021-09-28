@@ -8,12 +8,14 @@ terraform {
   }
 }
 
+###
 #
 # Description:  
 #
-# Creates a new web-based data integration and then adds a data action that calls out to my AWS lambda.  
+# Creates a new web-based data integration and then adds a data action that calls out to the AWS API Gateway endpoint and 
+# Lambda that is performing our email-classification.
 #
-# 
+### 
 
 resource "genesyscloud_integration" "ComprehendDataAction" {
   intended_state   = "ENABLED"
