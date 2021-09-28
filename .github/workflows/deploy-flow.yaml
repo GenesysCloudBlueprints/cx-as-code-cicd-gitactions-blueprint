@@ -9,7 +9,6 @@ jobs:
   deploy-email-flow-dev:
     runs-on: ubuntu-latest
     env:
-      ## Used by archy and the python scripts
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
@@ -25,12 +24,8 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - uses: ./.github/actions/genesys-cloud-apply-terraform # Step 4: Init Terraform and run the Terraform with CX as Code Objects
-      #Run Archy to import a flow
-      - name: Run Archy to import flow
-        run: |
-          export PATH=$PATH:$GITHUB_WORKSPACE/archy
-          archy publish --forceUnlock --file=$GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/output/results.json
-          cat $GITHUB_WORKSPACE/output/results.json
+      - uses: ./.github/actions/genesys-cloud-publish-archy-flow # Step 5: Use location action to publish Archy flow
+          
 
       #Use the Python to create the email domain route
       - name: Add email domain route

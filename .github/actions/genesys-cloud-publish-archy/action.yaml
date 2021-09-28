@@ -1,0 +1,10 @@
+name: "Publish Archy Flow"
+description: "Use Archy to Publish Flows"
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        export PATH=$PATH:$GITHUB_WORKSPACE/archy
+        archy publish --forceUnlock --file=$GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml --clientId $GENESYSCLOUD_OAUTHCLIENT_ID --clientSecret $GENESYSCLOUD_OAUTHCLIENT_SECRET --location $GENESYSCLOUD_ARCHY_REGION  --overwriteResultsFile --resultsFile $GITHUB_WORKSPACE/output/results.json
+        cat $GITHUB_WORKSPACE/output/results.json
+      shell: bash

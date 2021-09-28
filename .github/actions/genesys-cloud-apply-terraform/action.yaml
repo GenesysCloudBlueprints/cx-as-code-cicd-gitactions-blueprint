@@ -7,5 +7,5 @@ runs:
         cd blueprint/genesys-cloud-cx-as-code
         terraform init 
         terraform apply --auto-approve
-        cd ../..
+        cd ..
       shell: bash
