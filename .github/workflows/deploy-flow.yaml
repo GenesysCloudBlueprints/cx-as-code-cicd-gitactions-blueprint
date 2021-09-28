@@ -25,7 +25,7 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
         env:
-          TF_WORKSPACE: "genesys_email_dev"
+          TF_WORKSPACE: "dev"
 
       #Init Terraform and run it
       - name: Initialize terraform and run it
@@ -80,7 +80,7 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
         env:
-          TF_WORKSPACE: "genesys_email_test"
+          TF_WORKSPACE: "test"
 
       #Init Terraform and run it
       - name: Initialize terraform and run it
