@@ -1,0 +1,11 @@
+name: "Invoke Terraform with Auto Apply"
+description: "Invoke Terraform with Auto Apply"
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        cd blueprint/genesys-cloud-cx-as-code
+        terraform init 
+        terraform apply --auto-approve
+        cd ../..
+      shell: bash
