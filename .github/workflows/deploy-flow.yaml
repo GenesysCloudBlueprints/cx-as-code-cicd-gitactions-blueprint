@@ -25,12 +25,8 @@ jobs:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - uses: ./.github/actions/genesys-cloud-apply-terraform
       - uses: ./.github/actions/genesys-cloud-publish-archy-flow
+      - uses: ./.github/actions/genesys-cloud-create-email-domain-route
 
-      #Use the Python to create the email domain route
-      - name: Add email domain route
-        run: |
-          export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
-          python $GITHUB_WORKSPACE/blueprint/scripts/create_email_domain.py
   execute-platform-tests:
     runs-on: ubuntu-latest
     needs: deploy-email-flow-dev
@@ -44,6 +40,7 @@ jobs:
       - uses: ./.github/actions/genesys-cloud-dev-tools
       - name: Platform tests
         run: python blueprint/scripts/platform_tests.py
+
   deploy-email-flow-test:
     runs-on: ubuntu-latest
     needs: execute-platform-tests
@@ -58,25 +55,11 @@ jobs:
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "test"
     steps:
-      # Step 1: Checkout code
       - uses: actions/checkout@v2
-
-      # Step 2: Use local action to install Genesys Python SDK and Archy
       - uses: ./.github/actions/genesys-cloud-dev-tools
-
-      # Step 3: Install Terrform and configure it
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
-      # Step 4: Init Terraform and run the Terraform with CX as Code Objects
       - uses: ./.github/actions/genesys-cloud-apply-terraform
-
-      # Step 5: Use location action to publish Archy flow
       - uses: ./.github/actions/genesys-cloud-publish-archy-flow
-
-      #Use the CLI to create the email domain route
-      - name: Add email domain route
-        run: |
-          export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
-          python $GITHUB_WORKSPACE/blueprint/scripts/create_email_domain.py
+      - uses: ./.github/actions/genesys-cloud-create-email-domain-route

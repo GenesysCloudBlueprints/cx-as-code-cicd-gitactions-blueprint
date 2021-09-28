@@ -1,0 +1,9 @@
+name: "Create Email Domain Route"
+description: "Create Email Domain"
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        export GENESYSCLOUD_FLOW_ID=$(cat $GITHUB_WORKSPACE/output/results.json | jq -r '.output.flowInfo.id')
+        python $GITHUB_WORKSPACE/blueprint/scripts/create_email_domain.py
+      shell: bash
