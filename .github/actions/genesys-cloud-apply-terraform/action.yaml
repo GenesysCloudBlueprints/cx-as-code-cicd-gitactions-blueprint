@@ -4,9 +4,8 @@ runs:
   using: "composite"
   steps:
     - run: |
-        cd ~
-        cd blueprint/genesys-cloud-cx-as-code
+        cd $GITHUB_WORKSPACE/blueprint/genesys-cloud-cx-as-code
         terraform init 
         terraform apply --auto-approve
-        cd ~
+        cd $GITHUB_WORKSPACE
       shell: bash
