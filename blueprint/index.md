@@ -340,57 +340,21 @@ GitHub actions are the mechanism in which you can define a CI/CD pipeline. GitHu
     d. `GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST`. This is the Genesys Cloud OAuth Client secret for your Genesys Cloud test environment.  This will be used by the Archy and Python scripts being executed by the GitHub action.
     e. `TF_API_TOKEN`. This is the token generated in the [AWS Lambda function](#setting-up-a-terraform-cloud-user-token "Goes to the setting up a terraform cloud-user-token")
 
-
 ### Deploy the Genesys Cloud objects
 
-We use Genesys Cloud CX as Code, Genesys Cloud Python SDK, and Genesys Cloud's Archy to deploy all of the Genesys Cloud objects that are used to handle the email flow in this blueprint.
+To deploy both your Genesys Cloud configuration and your architect flows, you take one of two actions:
 
-1. `GENESYSCLOUD_OAUTHCLIENT_ID` - The Genesys Cloud OAuth2 client credential under which the CX as Code provider runs. For more information, see [Create an OAuth client](https://help.mypurecloud.com/articles/create-an-oauth-client/ "Opens the Create an OAuth client page") in the Genesys Cloud Resource Center.
-2. `GENESYSCLOUD_OAUTHCLIENT_SECRET` - The Genesys Cloud OAuth2 client secret under which the CX as Code provider runs.
-3. `GENESYSCLOUD_REGION` - The region used by the Genesys Cloud OAuth2 client. For a list of Genesys Cloud regions and the corresponding AWS regions, see [Platform API](https://developer.genesys.cloud/api/rest/ "Opens the Platform API page") in the Genesys Cloud Developer Center.
-4. `GENESYSCLOUD_API_REGION` - The Genesys Cloud API endpoint to which the Genesys Cloud SDK connects. For a list of valid values for the `API SERVER` field, see [Platform API](https://developer.genesys.cloud/api/rest/ "Opens the Platform API page") in the Genesys Cloud Developer Center.
-5. `GENESYSCLOUD_ARCHY_REGION` - The Genesys Cloud domain name that Archy uses to resolve the Genesys Cloud AWS region to which it connects. Valid locations include:
-    - apne2.pure.cloud
-    - aps1.pure.cloud
-    - cac1.pure.cloud
-    - euw2.pure.cloud
-    - mypurecloud.com
-    - mypurecloud.com.au
-    - mypurecloud.de
-    - mypurecloud.ie
-    - mypurecloud.jp
-    - usw2.pure.cloud
-
-* `genesys_email_domain` - A globally unique name for your Genesys Cloud email domain name. If you choose a name that exists, then the execution of the CX as Code scripts fails.
-
-* `genesys_email_domain_region` - The suffix for the email domain. Valid values are based on the corresponding AWS regions:
-
-  | Region            	| Domain suffix    	|
-  |--------------------	|-----------------	|
-  | US East             | mypurecloud.com   |
-  | US West            	| pure.cloud      	|
-  | Canada             	| pure.cloud      	|
-  | Europe (Ireland)   	| mypurecloud.ie  	|
-  | Europe (London)    	| pure.cloud      	|
-  | Europe (Frankfurt) 	| mypurecloud.de  	|
-  | Asia (Mumbai)      	| pure.cloud      	|
-  | Asia (Tokyo)       	| mypurecloud.jp  	|
-  | Asia (Seoul)       	| pure.cloud      	|
-  | Asia (Sydney)      	| mypurecloud.au  	|
-
-   :::primary
-   **Note**: Your `genesys_email_domain_region` must be in the same region as your Genesys Cloud organization.
-   :::
-
-  This file contains a script that creates an inbound email route called `support` to which the users can send emails. For example, if you set your `genesys_email_domain` to `devengagedev` and `genesys_email_domain_region` to `pure.cloud`, then the `CX as Code` script creates an email route `support@devengagedev.pure.cloud`. Any emails sent to this address are processed by the email flow.
-
-* `classifier_url` - The endpoint that invokes the classifier. Use the endpoint that you noted when you deployed the [AWS Lambda function](#deploy-the-serverless-microservice-using-aws-lambda-and-amazon-api-gateway "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section").
-* `classifier_api_key` - The API key that invokes the endpoint. Use the API key that you noted when you deployed the [AWS Lambda function](#deploy-the-serverless-microservice-using-aws-lambda-and-amazon-api-gateway "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section").
+1. **Make a change to the configuration code and then commit it to the source repository**. This will automatically kick off a deploy.
+2. **Launch your deploy manually**.
+   a. Log into your Github repository containing your code.
+   b. Select "Actions"
+   c. On the left menu select "Genesys Cloud Email Non-Prod"
+   d. Press the "Run workflow" button on the right hand of the screen.
+   e. Select the main branch from the drop down and press the "Run workflow" button.
+  
+Once a deploy is started, under the "Actions
 
 
-:::primary
-**Note**:  The Terraform scripts attempt to create an email domain route. By default, Genesys Cloud only allows two email domain route per organization. If you already have a domain route, then use the email ID of that existing route in this script. Alternatively, you can also contact the Genesys Cloud [CARE](https://help.mypurecloud.com/articles/contact-genesys-cloud-care/) team and make a request to increase the rate limit for the organization.
-:::
 
 ### Test the deployment
 
