@@ -1,5 +1,6 @@
-# Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, CX as Code, and Archy (WIP - NOT TECHNICAL OR CONTENT REVIEWED)
+# Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, CX as Code, and Archy 
 
+> **WARNING:  THIS BLUEPRINT IS STILL IN DEVELOPMENT. WHILE THE CODE EXAMPLES IN THIS BLUEPRINT ARE ACCURATE, THE TEXT IS STILL UNDER TECHNICAL AND CONTENT REVIEW** 
 > View the full [Build a CI/CD pipeline using GitHub Actions, Terraform, CX as Code, and Archy](https://developer.mypurecloud.com/blueprints/) article on the Genesys Cloud Developer Center. This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations.  
 
 This blueprint will show how to:

@@ -9,6 +9,7 @@ summary: |
   This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations. 
 ---
 
+**WARNING:  THIS BLUEPRINT IS STILL IN DEVELOPMENT. WHILE THE CODE EXAMPLES IN THIS BLUEPRINT ARE ACCURATE, THE TEXT IS STILL UNDER TECHNICAL AND CONTENT REVIEW**
 This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations. 
 
 This blueprint also demonstrates how to:
@@ -19,20 +20,24 @@ This blueprint also demonstrates how to:
 * Demonstrate how to deploy a single flow across multiple environments, leveraging platform tests to determine whether a build gets deployed to production
 
 ## Scenario
-An organization is interested in deploying a Genesys Cloud Architect flow and its dependent objects (e.g. queues, data actions, etc.) immutably across all of their Genesys Cloud organizations with no Genesys Cloud administrator having to manually setup and configure these objects in each of their Genesys Cloud environments. The goal is to guarantee consistent system configuration with minimal opportunity for configuration drift.
+An organization is interested in deploying a Genesys Cloud Architect flow and its dependent objects (e.g. queues, data actions, etc.) immutably across all of their Genesys Cloud organizations with no Genesys Cloud administrator having to manually setup and configure these objects in each of their Genesys Cloud environments. Their goal is to:
+
+1. **Implement an immutable architect**. The team is extremely worried about configuration drift within their environment and want to ensure that all changes to their configuration are captured in source control and they changes are promoted consistently across all of their Genesys Cloud environments.
+2. **Continuously integrate and deploy changes to their development and test environment**. As soon as a change is made to a Genesys Cloud configuration or flow and it committed to source control, the organization wants to deploy the changes as quickly as possible so that users can provide immediate feedback in the lower environments. 
+3. **Automate their test execution and deployments of flows**. All deploys in the non-production environments should occur without human intervention. Let the robots do the work. They do it consistently and repeatably.
 
 ## Solution
 Developers will use Archy and CX as Code manage their Architect flow and dependent objects as plain text files that can be checked into source control. The developers will use GitHub Actions to define and execute a CI/CD pipeline that will first deploy the flow and the dependent objects to Genesys Cloud development environment. Once the code is deployed to development, a platform test will be executed to ensure the deployed flow is functioning properly. If the platform tests pass, the code then deploys the same flow and configuration to a test environment
 
 The following illustration highlights these steps in the workflow:
 
-1. A developer checks their Architect flow and CX as Code files into the GitHub repository. On check-in, a GitHub action will be executed and begins the deployment of the Architect flow and its dependent objects to a development Genesys Cloud environment.
+1. **A developer checks their Architect flow and CX as Code files into the GitHub repository**. On check-in, a GitHub action will be executed and begins the deployment of the Architect flow and its dependent objects to a development Genesys Cloud environment.
 
-2. GitHub spins up a virtual environment an executes the CI/CD pipeline. It installs Terraform and executes the CX as Code environment. It then installs Archy and imports the flow to the target Genesys Cloud environment. It then runs a small python script to hook the Archy flow to its trigger.
+2. **GitHub spins up a virtual environment an executes the CI/CD pipeline**. It installs Terraform and executes the CX as Code environment. It then installs Archy and imports the flow to the target Genesys Cloud environment. It then runs a small python script to hook the Archy flow to its trigger.
 
-3. Once the deployment to the development environment is complete, GitHub will spin up another environment and then run a python-based platform test that checks to make sure the flow and its dependent objects are properly functioning. If the platform tests pass, the GitHub Action will then start a deploy to a Genesys Cloud test environment. If the platform tests fail, no further deployments will occur.
+3. **Once the deployment to the development environment is complete, GitHub will spin up another environment and then run a python-based platform test that checks to make sure the flow and its dependent objects are properly functioning**. If the platform tests pass, the GitHub Action will then start a deploy to a Genesys Cloud test environment. If the platform tests fail, no further deployments will occur.
 
-4. If the platform tests pass, GitHub will spin up another virtual environment and perform the same steps as defined in step #2, except that the deployment will occur against a test Genesys Cloud environment.
+4. **If the platform tests pass, GitHub will spin up another virtual environment and perform the same steps as defined in step #2, except that the deployment will occur against a test Genesys Cloud environment**. All the core Genesys Cloud configuration is applied.
 
 
 ![Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, CX as Code, and Archy](images/GitHubCICDPipeline.png "Build a CI/CD pipeline using GitHub Actions, Terraform, CX as Code, and Archy")
@@ -210,7 +215,6 @@ To classify the inbound email messages, you must first train and deploy an Amazo
   ```
 
 ### Deploy the serverless microservice using AWS Lambda and Amazon API Gateway
-
 Deploy the microservice that passes the email body from the Genesys Cloud Architect email flow to the Amazon Comprehend classifier. To do this, invoke the AWS Lambda function using the Amazon API Gateway endpoint. The AWS Lambda is built using Typescript and deployed using the [Serverless](https://www.serverless.com/) framework.
 
 1. Create a `.env.dev` file in the `blueprint/aws-classifier-lambda` directory. Add the two parameters, `CLASSIFIER_ARN` and `CLASSIFIER_CONFIDENCE_THRESHOLD` in the file.
@@ -341,7 +345,6 @@ GitHub actions are the mechanism in which you can define a CI/CD pipeline. GitHu
     e. `TF_API_TOKEN`. This is the token generated in the [AWS Lambda function](#setting-up-a-terraform-cloud-user-token "Goes to the setting up a terraform cloud-user-token")
 
 ### Deploy the Genesys Cloud objects
-
 To deploy both your Genesys Cloud configuration and your architect flows, you take one of two actions:
 
 1. **Make a change to the configuration code and then commit it to the source repository**. This will automatically kick off a deploy.
@@ -352,15 +355,12 @@ To deploy both your Genesys Cloud configuration and your architect flows, you ta
    d. Press the "Run workflow" button on the right hand of the screen.
    e. Select the main branch from the drop down and press the "Run workflow" button.
   
-Once a deploy is started, under the "Actions
-
-
+Once a deploy is started, if you click the "Actions" menu item you will see a list of all the current and previous deploys. You should see your deploy kicking.
 
 ### Test the deployment
-
 Send an email to the configured email domain route and check whether the appropriate agent has received the email.
 
- For example, you can send an email with any of the following questions about IRA:
+For example, you can send an email with any of the following questions about IRA:
 
 - Can I rollover my existing 401K to my IRA?
 - Is an IRA tax-deferred?
@@ -378,9 +378,9 @@ The email with a request for IRA information is sent to the IRA queue.
 * [AWS Lambda](https://aws.amazon.com/translate/ "Opens the Amazon AWS Lambda page") in the Amazon featured services
 * [Amazon Comprehend](https://aws.amazon.com/comprehend/ "Opens the Amazon Comprehend page") in the Amazon featured services
 * [Serverless Framework](https://www.serverless.com/ "Opens the Serverless Framework page") in the Serverless Framework website
-* [GitHub Actions]()
-* [Terraform Cloud]()
-* [Archy]()
+* [GitHub Actions](https://docs.github.com/en/actions) "Opens the Github Actions page") in the GitHub website
+* [Terraform Cloud](https://app.terraform.io/signup/account) "Opens the Terraform Cloud sign up page") in the Terraform Cloud website
+* [Archy](https://developer.genesys.cloud/devapps/archy/) "Opens the Archy Flow Tool") in the Genesys Cloud Developer Center 
 * [CX as Code](https://developer.genesys.cloud/api/rest/CX-as-Code/ "Opens the CX as Code page") in the Genesys Cloud Developer Center
 * [Terraform Registry Documentation](https://registry.terraform.io/providers/MyPureCloud/genesyscloud/latest/docs "Opens the Genesys Cloud provider page") in the Terraform documentation
 
