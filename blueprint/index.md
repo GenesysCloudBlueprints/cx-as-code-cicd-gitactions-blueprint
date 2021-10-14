@@ -291,7 +291,7 @@ To set up your development workspace take the following actions:
     variables are used to configure your Terraform jobs with environment specific variables. Terraform variables are used to parameterize your scripts while environment variables are usually used to by
     Terraform providers to authenticate and connect to resources.
 6.  Define your Terraform  variables. 
-    a. `genesys_email_domain`. A globally unique name for your Genesys Cloud email domain name. If you choose a name that exists, then the execution of the CX as Code scripts fails.
+    a. `genesys_email_domain`. A globally unique name for your Genesys Cloud email domain name. If you choose a name that exists, then the execution of the CX as Code scripts fails. Remember whatever you pick will be the prefix for your email address. So, if the value you set here is "genesys_email_dev" and your Genesys Cloud organization is in us-west-2, your generated email address will be "@genesys_email_dev.pure.cloud".
     b. `genesys_email_domain_region`.  The suffix for the email domain. Valid values are based on the corresponding AWS regions:
       | Region            	| Domain suffix    	|
       |--------------------	|-----------------	|
@@ -312,14 +312,14 @@ To set up your development workspace take the following actions:
   7. Define your environment variables.  
     a. `GENESYSCLOUD_OAUTHCLIENT_ID`. This is the Genesys Cloud client credential grant id that CX as Code will execute against. You should mark this environment variable as sensitive.
     b. `GENESYSCLOUD_OAUTHCLIENT_SECRET`. This is the Genesys Cloud client credential secret that CX as Code will execute against. You should mark this environment variable as sensitive.
-    c. `GENESYCLOUD_REGION`. This is the Genesys Cloud region your organization is located in.
+    c. `GENESYSCLOUD_REGION`. This is the Genesys Cloud region your organization is located in.
 
 At this point you have your development Terraform environment setup and you should now be ready to setup your test environment.
 
 #### Setting up a test workspace
 To setup the test environment, you need to perform almost the exact steps as those taken in setting up the development Terraform environment. The key difference between the development and test environment is that:
 
-1. In step #3 from above, name the Terraform environment to a value different then "genesys_email_dev". I suggest using "genesys_email_test".
+1. In step #6a from above, name the Terraform environment to a value different then "genesys_email_dev". I suggest using "genesys_email_test". Remember, whatever you pick will be the prefix for your email. So, if the value you set here is "genesys_email_test" and your organization is in us-west2, your generated email address will be "@genesys_email_test.pure.cloud".
 2. In step #6 and step #7 make sure you set your environment to point appropriately to your test organization. Make sure that your `genesys_email_domain`, `genesys_email_domain_region`, `classifier_url`, `classifier_api_key`, `GENESYSCLOUD_OAUTHCLIENT_ID`, `GENESYSCLOUD_OAUTHCLIENT_SECRET`, and `GENESYCLOUD_REGION` are all set to values appropriate to your test region.
 
 #### Setting up a Terraform cloud user token 
@@ -328,6 +328,7 @@ After the workspaces have setup we need to generate an Terraform Cloud authentic
 1.  Login to your Terraform Cloud account.
 2.  Click on your your user profile icon in the top right corner of your screen. This will cause a dropdown to appear.
 3.  Select the "User settings" menu item.
+4.  Navigate to the "Tokens" menu item on the left hand side of the screen.
 4.  Click the "Create an API token". Provide a name for the token and click on "Create API token"
 5.  Cut and paste the generated token as it will be used later in setting up your GitHub action. Once you press the done button, you will not be able to 
     see the token again and will need to re-generate the token if you lose the value.
@@ -341,8 +342,8 @@ GitHub actions are the mechanism in which you can define a CI/CD pipeline. GitHu
     a. `GENESYSCLOUD_OAUTHCLIENT_ID_DEV`. This is the Genesys Cloud OAuth Client Id for your Genesys Cloud development environment.  This will be used by the Archy and Python scripts being executed by the GitHub action.
     b. `GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV`. This is the Genesys Cloud OAuth secret for your Genesys Cloud development environment.  This will be used by the Archy and Python scripts being executed by the GitHub action.
     c. `GENESYSCLOUD_OAUTHCLIENT_ID_TEST`. This is the Genesys Cloud OAuth Client Id for your Genesys Cloud test environment.  This will be used by the Archy and Python scripts being executed by the GitHub action.
-    d. `GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST`. This is the Genesys Cloud OAuth Client secret for your Genesys Cloud test environment.  This will be used by the Archy and Python scripts being executed by the GitHub action.
-    e. `TF_API_TOKEN`. This is the token generated in the [AWS Lambda function](#setting-up-a-terraform-cloud-user-token "Goes to the setting up a terraform cloud-user-token")
+    d. `GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST`. This is the Genesys Cloud OAuth Client secret for your Genesys Cloud test environment. This will be used by the Archy and Python scripts being executed by the GitHub action.
+    e. `TF_API_TOKEN`. This is the token generated in the [Terraform Cloud](#setting-up-a-terraform-cloud-user-token "Goes to the setting up a terraform cloud-user-token") UI and is used by Terraform to authenticate with Terraform cloud
 
 ### Deploy the Genesys Cloud objects
 To deploy both your Genesys Cloud configuration and your architect flows, you take one of two actions:
