@@ -35,10 +35,14 @@ Developers use Archy and CX as Code to manage their Architect flow and dependent
 
 This illustration highlights these workflow steps:
 
-1. **A developer checks their Architect flow and CX as Code files into the GitHub repository**. Upon checkin, a GitHub action is executed and begins the deployment of the Architect flow and its dependent objects to a development Genesys Cloud environment.
-2. **A GitHub Action spins up a virtual environment an executes the CI/CD pipeline**. It installs Terraform and executes the CX-as-Code environment. The GitHub Action then installs Archy and imports the Architect flow to the target Genesys Cloud environment. Finally, the GitHub Action runs a small Python script to connect the Archy flow to its trigger.
-3. **Once the deployment to the development environment is complete, GitHub spins up another environment and runs a Python-based platform test that checks to make sure the flow and its dependent objects are properly functioning**. If the platform tests pass, the GitHub Action then starts a deploy to a Genesys Cloud test environment. If the platform tests fail, no further deployments will occur.
-4. **If the platform tests pass, a GitHub Action spins up another virtual environment and repeats step #2 in a test Genesys Cloud environment**. The deployment completes the entire Genesys Cloud core configuration.
+1. **A developer checks their Architect flow and CX-as-Code files into the GitHub repository**. Upon checkin, a GitHub Action is executed that begins the deployment of the Architect inbound email flow along within its dependent objects to a development Genesys Cloud environment.
+2. **A GitHub Action spins up a virtual environment an executes the CI/CD pipeline**. The GitHub Action:   
+  * Installs Terraform, which handles the backing state and locking.
+  * Executes the CX-as-Code environment and creates all prerequisites that are needed for the Architect inbound email flow.
+  * Installs Archy and imports the Architect inbound email flow to the target Genesys Cloud environment and source control. **Note**: Archy does not manage flow dependencies.
+  * Runs a small Python script that uses the Genesys Cloud Platform API SDK to connect the Architect inbound email flow to its trigger and the email domain route.
+3. **Once the deployment to the development environment is complete, the GitHub Action spins up another environment. It also runs a platform test that checks to make sure the flow and its dependent objects function properly**. The test involves a small Python script that uses the Genesys Cloud Platform API SDK. If the platform tests pass, the GitHub Action starts a deploy to a Genesys Cloud test environment. If the platform tests fail, no further deployments occur.
+4. **If the platform test passes, a GitHub Action repeats step #2 to create a test Genesys Cloud environment**. The deployment completes the entire Genesys Cloud core configuration.
 
 ## Contents
 
@@ -58,9 +62,9 @@ This illustration highlights these workflow steps:
 
 While the primary focus of this blueprint will be setting up a CI/CD pipeline, the Architect flow used in this example requires the following components to be deployed:
 
-* **Amazon API Gateway** - An AWS service for using APIs in a secure and scalable environment. In this solution, the API Gateway exposes a REST endpoint that is protected by an API key. Requests that come to the gateway are forwarded to an AWS Lambda.
-* **AWS Lambda** - A serverless computing service for running code without creating or maintaining the underlying infrastructure. In this solution, AWS Lambda processes requests that come through the Amazon API Gateway and calls the Amazon Comprehend endpoint.  
-* **Amazon Comprehend** - An AWS service that uses natural-language processing (NLP) to analyze and interpret the content of text documents. In this solution, you use Amazon Comprehend to train a machine learning model that does real-time classification of inbound emails so they can be routed to the appropriate queue.
+* **Amazon API Gateway** - An AWS service for using APIs in a secure and scalable environment. In this solution, the API Gateway exposes a REST endpoint that is protected by an API key. Requests that come to the gateway are forwarded to an AWS Lambda. For more information, see [Amazon API Gateway](https://aws.amazon.com/api-gateway/ "Opens the Amazon API Gateway page") in the Amazon featured services website.
+* **AWS Lambda** - A serverless computing service for running code without creating or maintaining the underlying infrastructure. In this solution, AWS Lambda processes requests that come through the Amazon API Gateway and calls the Amazon Comprehend endpoint. For more information, see [AWS Lambda](https://aws.amazon.com/translate/ "Opens the Amazon AWS Lambda page") in the Amazon featured services website.
+* **Amazon Comprehend** - An AWS service that uses natural-language processing (NLP) to analyze and interpret the content of text documents. In this solution, you use Amazon Comprehend to train a machine learning model that does real-time classification of inbound emails so they can be routed to the appropriate queue. For more information, see [Amazon Comprehend](https://aws.amazon.com/comprehend/ "Opens the Amazon Comprehend page") in the Amazon featured services website.
 
 :::primary
 **Important**: AWS CloudFormation doesn't support the Amazon Comprehend API.
@@ -77,8 +81,8 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 * Administrator-level knowledge of Genesys Cloud
 * AWS Cloud Practitioner-level knowledge of AWS IAM, Amazon Comprehend, Amazon API Gateway, AWS Lambda, AWS SDK for JavaScript, and the AWS CLI (Command Line Interface)
 * Experience using the Genesys Cloud Platform API and the Genesys Cloud Platform API SDK - Python
-* Experience using GitHub.
-* Experience with Terraform or Terraform Cloud.  
+* Experience using GitHub
+* Experience with Terraform or Terraform Cloud
 
 :::primary
 **Tip**: Both GitHub and Terraform Cloud provide free-tier services that you can use to test this blueprint.
@@ -88,8 +92,9 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 
 * A Genesys Cloud license. For more information, see [Genesys Cloud Pricing](https://www.genesys.com/pricing "Opens the Genesys Cloud pricing page") in the Genesys website.
 * Master Admin role. For more information, see [Roles and permissions overview](https://help.mypurecloud.com/?p=24360 "Opens the Roles and permissions overview article") in the Genesys Cloud Resource Center.
-* Archy. For more information, see [Welcome to Archy](/devapps/archy/ "Goes to the Welcome to Archy page") in the Genesys Cloud Developer Center.
-* Genesys Cloud Platform API Client SDK - Python. For more information, see [Platform API Client SDK - Python](/api/rest/client-libraries/python/ "Goes to the Platform API Client SDK - Python page") in the Genesys Cloud Developer Center.
+* Archy. For more information, see [Welcome to Archy](/devapps/archy/ "Goes to the Welcome to Archy page").
+* CX as Code. For more information, see [CX as Code](https://developer.genesys.cloud/api/rest/CX-as-Code/ "Opens the CX as Code page").
+* Genesys Cloud Platform API Client SDK - Python. For more information, see [Platform API Client SDK - Python](/api/rest/client-libraries/python/ "Goes to the Platform API Client SDK - Python page").
 
 ### AWS account
 
@@ -119,11 +124,12 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 ## Implementation steps
 
 1. [Clone the GitHub repository](#clone-the-github-repository "Goes to the Clone the GitHub repository section")
-2. [Train and deploy the AWS Comprehend machine learning classifier](#train-and-deploy-the-aws-comprehend-machine-learning-classifier "Goes to the Train and deploy the AWS Comprehend machine learning classifier section")
-3. [Deploy Amazon API Gateway and AWS Lambda](#deploy-amazon-api-gateway-and-aws-lambda "Goes to the Deploy Amazon API Gateway and AWS Lambda section")
+2. [Train and deploy the AWS Comprehend machine learning classifier](#train-and-deploy-the-amazon-comprehend-machine-learning-classifier "Goes to the Train and deploy the AWS Comprehend machine learning classifier section")
+3. [Deploy the serverless microservice using AWS Lambda and Amazon API Gateway](#deploy-the-serverless-microservice-using-aws-lambda-and-amazon-api-gateway "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section")
 4. [Define the Terraform Cloud configuration](#define-the-terraform-cloud-configuration "Goes to the Define the Terraform Cloud configuration section")
 5. [Define the GitHub Actions configuration](#define-the-github-actions-configuration "Goes to the Define the GitHub Actions configuration section")
-6. [Deploy the Genesys Cloud objects](#deploy-the-Genesys-Cloud-objects "Goes to the Deploy the Genesys Cloud objects section")
+6. [Deploy the Genesys Cloud objects](#deploy-the-genesys-cloud-objects "Goes to the Deploy the Genesys Cloud objects section")
+7. [Test the deployment](#test-the-deployment "Goes to the Test the deployment section")
 
 ### Clone the GitHub repository
 
@@ -417,16 +423,11 @@ For example, you can send an email with any of the following questions about IRA
 
 The email with a request for IRA information is sent to the IRA queue.
 
-
 ## Additional resources
 
-* [Genesys Cloud data action](https://help.mypurecloud.com/articles/about-the-data-actions-integrations/ "Opens the data actions integrations article") in the Genesys Cloud Resource Center
-* [Amazon API Gateway](https://aws.amazon.com/api-gateway/ "Opens the Amazon API Gateway page") in the Amazon featured services
-* [AWS Lambda](https://aws.amazon.com/translate/ "Opens the Amazon AWS Lambda page") in the Amazon featured services
-* [Amazon Comprehend](https://aws.amazon.com/comprehend/ "Opens the Amazon Comprehend page") in the Amazon featured services
+* [Genesys Cloud data actions integrations](https://help.mypurecloud.com/?p=209478 "Opens the data actions integrations article") in the Genesys Cloud Resource Center
 * [Serverless Framework](https://www.serverless.com/ "Opens the Serverless Framework page") in the Serverless Framework website
-* [GitHub Actions](https://docs.github.com/en/actions) "Opens the Github Actions page") in the GitHub website
-* [Terraform Cloud](https://app.terraform.io/signup/account) "Opens the Terraform Cloud sign up page") in the Terraform Cloud website
-* [Archy](https://developer.genesys.cloud/devapps/archy/) "Opens the Archy Flow Tool") in the Genesys Cloud Developer Center
-* [CX as Code](https://developer.genesys.cloud/api/rest/CX-as-Code/ "Opens the CX as Code page") in the Genesys Cloud Developer Center
+* [GitHub Actions](https://docs.github.com/en/actions "Opens the Github Actions page") in the GitHub website
+* [Terraform Cloud](https://app.terraform.io/signup/account "Opens the Terraform Cloud sign up page") in the Terraform Cloud website
 * [Terraform Registry Documentation](https://registry.terraform.io/providers/MyPureCloud/genesyscloud/latest/docs "Opens the Genesys Cloud provider page") in the Terraform documentation
+* [cx-as-code-cicd-gitactions-blueprint repository](https://github.com/GenesysCloudBlueprints/cx-as-code-cicd-gitactions-blueprint "Goes to the cx-as-code-cicd-gitactions-blueprint repository") in Github
