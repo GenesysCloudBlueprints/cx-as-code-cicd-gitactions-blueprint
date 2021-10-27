@@ -3,7 +3,7 @@ title: Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, CX as Code,
 author: john.carnell
 indextype: blueprint
 icon: blueprint
-image: images/blueprint/images/GitHubCICDPipeline.png
+image: images/GitHubCICDPipeline.png
 category: 5
 summary: |
   This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations.
