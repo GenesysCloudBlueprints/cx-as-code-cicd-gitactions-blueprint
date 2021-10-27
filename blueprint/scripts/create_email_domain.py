@@ -28,7 +28,7 @@ def deleteEmailRoute():
         routingApi.delete_routing_email_domain_route(FULL_ROUTE, routeId)
         print("Successfully deleted email route for target domain: {}".format(FULL_ROUTE))
 
-def createEmailRoute():
+def createEmailRoute(   ):
     print("Creating email route 'support' for flow id: {}\n".format(FLOW_ID))
 
     body = PureCloudPlatformClientV2.InboundRoute() 
