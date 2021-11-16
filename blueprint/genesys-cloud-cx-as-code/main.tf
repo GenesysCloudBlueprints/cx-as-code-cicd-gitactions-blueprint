@@ -25,17 +25,21 @@ module "classifier_users" {
   source = "./modules/users"
 }
 
-# module "classifier_queues" {
-#   source                   = "./modules/queues"
-#   classifier_queue_names   = ["401K", "IRA", "529", "GeneralSupport", "Banking"]
-#   classifier_queue_members = module.classifier_users.user_ids
-# }
+#This is an example of creating queues using a remote modules.  Remote modules allow you to re-use Terraform/CX as Code component across multiple Terraform
+#configs.
 
 module "classifier_queues" {
   source                   = "git::https://github.com/GenesysCloudDevOps/genesys-cloud-queues-demo.git?ref=main"
   classifier_queue_names   = ["401K", "IRA", "529", "GeneralSupport"]
   classifier_queue_members = module.classifier_users.user_ids
 }
+
+module "classifier_queues" {
+  source                   = "./modules/queues"
+  classifier_queue_names   = ["401K", "IRA", "529", "GeneralSupport", "TechSupport"]
+  classifier_queue_members = module.classifier_users.user_ids
+}
+
 
 module "classifier_email_routes" {
   source               = "./modules/email_routes"
