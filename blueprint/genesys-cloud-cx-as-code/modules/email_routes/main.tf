@@ -15,7 +15,7 @@ terraform {
 # command will fail if there is already have two email routes present.
 ###
 
-resource "genesyscloud_routing_email_domain" "devengage_email_routing_domain" {
+resource "genesyscloud_routing_email_domain" "devengage_email_domain" {
   domain_id = var.genesys_email_domain
   subdomain = true
 }
