@@ -16,7 +16,7 @@ terraform {
 # scripts instead of through a DevOps style tool.
 ###
 resource "genesyscloud_user" "sheldoncooper_agent" {
-  email           = "sheldon.cooper@neverreal.demo.com"
+  email           = "sheldon.cooper@neverreal2.demo.com"
   name            = "Sheldon Cooper"
   password        = "b@Zinga1972"
   state           = "active"
