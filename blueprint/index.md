@@ -6,7 +6,7 @@ icon: blueprint
 image: images/GitHubCICDPipeline.png
 category: 5
 summary: |
-This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations.
+  This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations.
 ---
 :::{"alert":"primary","title":"About Genesys Cloud Blueprints","autoCollapse":false} 
 Genesys Cloud blueprints were built to help you jump-start building an application or integrating with a third-party partner. 
