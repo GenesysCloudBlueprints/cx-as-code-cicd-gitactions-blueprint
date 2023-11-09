@@ -7,7 +7,7 @@ terraform {
 
     workspaces {
       prefix = "genesys_email_"
-    }
+    }ß
   }
 
   required_providers {
@@ -36,7 +36,7 @@ module "classifier_users" {
 
 module "classifier_queues" {
   source                   = "./modules/queues"
-  classifier_queue_names   = ["401K", "IRA", "ROTH", "529", "GeneralSupport", "PremiumSupport"]
+  classifier_queue_names   = ["401K", "IRA", "ROTH", "529", "GeneralSupport", "PremiumSupport","PremiumSupport2"]
   classifier_queue_members = module.classifier_users.user_ids
 }
 
