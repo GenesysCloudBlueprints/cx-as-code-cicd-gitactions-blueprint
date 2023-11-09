@@ -7,7 +7,7 @@ terraform {
 
     workspaces {
       prefix = "genesys_email_"
-    }ß
+    }
   }
 
   required_providers {
