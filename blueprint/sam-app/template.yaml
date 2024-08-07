@@ -27,14 +27,12 @@ Resources:
             Path: /hello
             Method: get
       Policies:
-        - AmazonDynamoDBFullAccess
-        - Version: '2012-10-17' # Policy Document
-          Statement:
-            - Effect: Allow
-              Action:
-                - dynamodb:*
-              Resource: 'arn:aws:dynamodb:*:*:table/dynamo_db_table_endpoint'
-
+      - Statement:
+        - Sid: ComprehendAccessPolicy
+          Effect: Allow
+          Action:
+          - comprehend:*
+          Resource: !Sub arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/emailclassifier
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
