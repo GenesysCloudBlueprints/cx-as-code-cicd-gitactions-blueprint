@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for email-classifier
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        ApiKeyRequired: true # sets for all methods
+
+  EmailClassifierFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: emailclassifier/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        ApiKey:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /
+            Method: post
+            Auth:
+              ApiKeyRequired: true
+        EmailClassifier:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /emailclassifier
+            Method: post
+      Policies:
+      - Statement:
+        - Sid: ComprehendAccessPolicy
+          Effect: Allow
+          Action:
+          - comprehend:*
+          Resource: !Sub arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/emailclassifier
+      Environment:
+        Variables:
+          AWS_ACCOUNT_ID: !Ref AWS::AccountId
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  EmailClassifierApi:
+    Description: "API Gateway endpoint URL for Prod stage for Email Classifier function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/emailclassifier/"
+  EmailClassifierFunction:
+    Description: "Email Classifier Lambda Function ARN"
+    Value: !GetAtt EmailClassifierFunction.Arn
+  EmailClassifierFunctionIamRole:
+    Description: "Implicit IAM Role created for Email Classifier function"
+    Value: !GetAtt EmailClassifierFunctionRole.Arn
