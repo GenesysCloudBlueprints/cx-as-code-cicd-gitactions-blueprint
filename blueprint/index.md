@@ -126,7 +126,7 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 * Serverless Framework running on the machine where you'll deploy the solution. For more information, see [Get started with Serverless Framework](https://www.serverless.com/framework/docs/getting-started/ "Opens the Serverless Framework page") in the Serverless Framework documentation.
 * Terraform (the latest binary). For more information, see [Download Terraform](https://www.terraform.io/downloads.html "Opens the Download Terraform page") in the Terraform website.
 * NodeJS version 14.15.0. For more information, see [Install NodeJS](https://github.com/nvm-sh/nvm "Opens the NodeJS GitHub repository").  
-* Python 3.7 or later. For more information, see [Python downloads](https://www.python.org/downloads/ "Goes to the Python Downloads website").
+* Python 3.9. For more information, see [Python downloads](https://www.python.org/downloads/ "Goes to the Python Downloads website").
 
 ## Implementation steps
 
@@ -236,52 +236,50 @@ To classify the inbound email messages, you must first train and deploy an Amazo
     }
   ```
 
-### Deploy the serverless microservice using AWS Lambda and Amazon API Gateway
+### Deploy the serverless microservice using AWS Serverless Application Model
 
-Deploy the microservice that passes the email body from the Architect inbound email flow to the Amazon Comprehend classifier. To do this, invoke the AWS Lambda function using the Amazon API Gateway endpoint. The AWS Lambda is built using Typescript and deployed using the [Serverless framework]( "Goes to the home page of the Serverless framework website").
+Deploy the microservice that passes the email body from the Architect inbound email flow to the Amazon Comprehend classifier. To do this, invoke the AWS Lambda function using the Amazon API Gateway endpoint. The AWS Lambda is built using Python and deployed using the [AWS Serverless Application Model (AWS SAM)](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html "Goes to the developer guide page of the AWS Serverless Application Model (AWS SAM) website").
 
-1. In the **/blueprint/aws-classifier-lambda** directory, create a .env.dev file with these parameters:
+1. In the **/blueprint/aws-sam-email-classifier** directory, run this command:
 
-  * `CLASSIFIER_ARN` - set to the `EndpointArn` value that you noted when you [trained and deployed the AWS Comprehend machine learning classifier](#train-and-deploy-the-aws-comprehend-machine-learning-classifier "Goes to the Train and deploy the AWS Comprehend machine learning classifier section").
-  * `CLASSIFIER_CONFIDENCE_THRESHOLD` - set to a value between 0 and 1 that signifies the level of confidence that you want the classifier to reach before a classification is returned. For example, if `CLASSIFIER_CONFIDENCE_THRESHOLD` is set to 0.75, then the classifier must reach a confidence level of at least 75 percent. If the classifier can't reach this threshold, then an empty string is returned.
+  ```
+  sam build
+  ```
 
-    Example .env.dev file:
+2. If the build process is successful, you may now proceed with running this command to deploy:
 
-    ```
-    CLASSIFIER_ARN=arn:aws:comprehend:us-east-1:000000000000:document-classifier-endpoint/emailclassifier-example-only     CLASSIFIER_CONFIDENCE_THRESHOLD=.75
-    ```
+  ```
+  sam deploy
+  ```
+
+  * `Comprehend Confidence Threshold` - set to a value between 0 and 1 that signifies the level of confidence that you want the classifier to reach before a classification is returned. For example, if `ComprehendConfidenceThreshold` is set to 0.75, then the classifier must reach a confidence level of at least 75 percent. If the classifier can't reach this threshold, then an empty string is returned.
+
     :::primary
-    **Tip**: You can also retrieve the value of the `EndpointArn` endpoint by using the command `aws comprehend list-endpoints`.
+    **Tip**: The default confidence threshold is set to 0.75, but it can be manually set by using the `ComprehendConfidenceThreshold` parameter like this:
     :::
+    ```
+    sam deploy --parameter-overrides ComprehendConfidenceThreshold=0.75
+    ```
 
-2. Open a command prompt and change to the directory **/blueprint/aws-classifier-lambda**.
-3. Download and install all the third-party packages and dependencies:
+3. If the deployment is successful, you may get the API Key from the API Gateway module in AWS Console.
 
-  ```
-  npm i
-  ```
+  ![Get the API Key from the API Gateway Module in AWS Console](images/APIGatewayKey.png "Get the API Key from the API Gateway Module in AWS Console")
 
-4. Deploy the Lambda function:
-
-   ```
-   serverless deploy
-   ```
-
-    The deployment takes approximately a minute to complete. Make a note of the `api key` and `endpoints` attributes. You'll need them when you deploy the Architect inbound email flow.
-
-5. Test the Lambda function:
+4. Test the Lambda function:
 
   ```shell
-  curl --location --request POST '<<YOUR API GATEWAY HERE>>' \
-  --header 'Accept: application/json' \
+  curl --location --request POST '<<YOUR API GATEWAY URL HERE>> ex. https://wgv7odyq40.execute-api.us-east-1.amazonaws.com/Prod/emailclassifier/' \
   --header 'Content-Type: application/json' \
-  --header 'x-amazon-apigateway-api-key-source: HEADER' \
   --header 'X-API-Key: <<YOUR API KEY HERE>>' \
   --data-raw '{
     "EmailSubject": "Question about IRA",
     "EmailBody": "Hi guys,\r\n\r\nI have some questions about my IRA?  \r\n\r\n1.  Can I rollover my existing 401K to my IRA.  \r\n2.  Is an IRA tax-deferred? \r\n3.  Can I make contributions from my IRA to a charitable organization?\r\n4.  Am I able to borrow money from my IRA?\r\n5.  What is the minimum age I have to be to start taking money out of my IRA?\r\n\r\nThanks,\r\n   John Doe"
   }'
   ```
+
+  :::primary
+  **Tip**: API Gateway URL is the endpoint we get after successful deployement added with the string `Prod/emailclassifier` to access the email classifier.
+  :::
 
 If the deployment is successful, you receive a JSON payload that lists the classification of the document along with the confidence level. For example:
 
