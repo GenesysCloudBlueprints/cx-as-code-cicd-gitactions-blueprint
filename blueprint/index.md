@@ -70,7 +70,7 @@ This illustration highlights these workflow steps:
 While the primary focus of this blueprint will be setting up a CI/CD pipeline, the Architect flow used in this example requires the following components to be deployed:
 
 * **Amazon API Gateway** - An AWS service for using APIs in a secure and scalable environment. In this solution, the API Gateway exposes a REST endpoint that is protected by an API key. Requests that come to the gateway are forwarded to an AWS Lambda. For more information, see [Amazon API Gateway](https://aws.amazon.com/api-gateway/ "Opens the Amazon API Gateway page") in the Amazon featured services website.
-* **AWS Lambda** - A serverless computing service for running code without creating or maintaining the underlying infrastructure. In this solution, AWS Lambda processes requests that come through the Amazon API Gateway and calls the Amazon Comprehend endpoint. For more information, see [AWS Lambda](https://aws.amazon.com/translate/ "Opens the Amazon AWS Lambda page") in the Amazon featured services website.
+* **AWS Serverless Application Model** - An open-source framework for building serverless applications using infrastructure as code (IaC). With AWS SAM’s shorthand syntax, developers declare [AWS Cloud Formation](https://aws.amazon.com/cloudformation/ "Opens the Amazon AWS Cloud Formation page") resources and specialized serverless resources that are transformed to infrastructure during deployment. This framework includes two main components: the AWS SAM CLI and the AWS SAM project. The AWS SAM project is the application project directory that is created when you run sam init. The AWS SAM project includes files like the AWS SAM template, which includes the template specification (the shorthand syntax you use to declare resources).
 * **Amazon Comprehend** - An AWS service that uses natural-language processing (NLP) to analyze and interpret the content of text documents. In this solution, you use Amazon Comprehend to train a machine learning model that does real-time classification of inbound emails so they can be routed to the appropriate queue. For more information, see [Amazon Comprehend](https://aws.amazon.com/comprehend/ "Opens the Amazon Comprehend page") in the Amazon featured services website.
 
 :::primary
@@ -86,7 +86,7 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 ### Specialized knowledge
 
 * Administrator-level knowledge of Genesys Cloud
-* AWS Cloud Practitioner-level knowledge of AWS IAM, Amazon Comprehend, Amazon API Gateway, AWS Lambda, AWS SDK for JavaScript, and the AWS CLI (Command Line Interface)
+* AWS Cloud Practitioner-level knowledge of AWS IAM, Amazon Comprehend, Amazon API Gateway, AWS SAM, AWS SDK for JavaScript, and the AWS CLI (Command Line Interface)
 * Experience using the Genesys Cloud Platform API and the Genesys Cloud Platform API SDK - Python
 * Experience using GitHub
 * Experience with Terraform or Terraform Cloud
@@ -109,9 +109,10 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
   * AWS Identity and Access Management (IAM)
   * AWS Comprehend
   * AWS API Gateway
-  * AWS Lambda
+  * AWS Serverless Application Model
 * AWS credentials. For more information about setting up your AWS credentials on your local machine, see [About credential providers](https://docs.aws.amazon.com/sdkref/latest/guide/creds-config-files.html "Opens the About credential providers page") in AWS documentation.
 * AWS CLI. For more information about installing the AWS CLI on your local machine, see [About credential providers](https://aws.amazon.com/cli/ "Opens the About credential providers page") in the AWS documentation.
+* AWS SAM CLI. For more information about installing the AWS SAM CLI on your local machine, see [Install AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html "Opens the Install AWS SAM CLI page") in the AWS documentation.
 
 ### Third-party software
 
