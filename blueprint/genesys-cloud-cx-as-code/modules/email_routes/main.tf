@@ -19,3 +19,11 @@ resource "genesyscloud_routing_email_domain" "devengage_email_domain" {
   domain_id = var.genesys_email_domain
   subdomain = true
 }
+
+resource "genesyscloud_routing_email_route" "devengage_email_domain" {
+  domain_id    = var.genesys_email_domain
+  pattern="support"
+  from_name="Financial Services"
+  from_email   = "support@${var.genesys_email_domain}.${genesys_email_domain_region}"
+  flow_id      = data.genesyscloud_flow.flow.id
+}
