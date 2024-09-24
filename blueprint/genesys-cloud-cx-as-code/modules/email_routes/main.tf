@@ -25,5 +25,5 @@ resource "genesyscloud_routing_email_route" "devengage_email_domain" {
   pattern="support"
   from_name="Financial Services"
   from_email   = "support@${var.genesys_email_domain}.${genesys_email_domain_region}"
-  flow_id      = data.genesyscloud_flow.flow.id
+  flow_id      = var.genesys_email_flow_id
 }
