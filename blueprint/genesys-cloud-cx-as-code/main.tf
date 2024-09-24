@@ -41,3 +41,7 @@ module "classifier_data_actions" {
   classifier_url     = var.classifier_url
   classifier_api_key = var.classifier_api_key
 }
+
+module "classifier_deploy_flows" {
+  source               = "./modules/deploy_flows"
+}
