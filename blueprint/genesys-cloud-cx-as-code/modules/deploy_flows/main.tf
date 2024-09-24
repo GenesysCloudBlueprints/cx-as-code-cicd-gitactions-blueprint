@@ -9,7 +9,7 @@ terraform {
 }
 
 resource "genesyscloud_flow" "classifier_flow" {
-  filepath          = "EmailComprehendFlow.yaml"
-  file_content_hash = filesha256("EmailComprehendFlow.yaml")
+  filepath          = "./EmailComprehendFlow.yaml"
+  file_content_hash = filesha256("./EmailComprehendFlow.yaml")
   
 }
