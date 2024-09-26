@@ -27,7 +27,7 @@ module "classifier_users" {
 
 module "classifier_queues" {
   source                   = "./modules/queues"
-  classifier_queue_names   = ["401K", "IRA", "ROTH", "529","GeneralSupport","HSA"]
+  classifier_queue_names   = ["401K", "IRA", "ROTH", "529","GeneralSupport"]
   classifier_queue_members = module.classifier_users.user_ids
 }
 
