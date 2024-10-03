@@ -70,7 +70,7 @@ This illustration highlights these workflow steps:
 While the primary focus of this blueprint will be setting up a CI/CD pipeline, the Architect flow used in this example requires the following components to be deployed:
 
 * **Amazon API Gateway** - An AWS service for using APIs in a secure and scalable environment. In this solution, the API Gateway exposes a REST endpoint that is protected by an API key. Requests that come to the gateway are forwarded to an AWS Lambda. For more information, see [Amazon API Gateway](https://aws.amazon.com/api-gateway/ "Opens the Amazon API Gateway page") in the Amazon featured services website.
-* **AWS Lambda** - A serverless computing service for running code without creating or maintaining the underlying infrastructure. In this solution, AWS Lambda processes requests that come through the Amazon API Gateway and calls the Amazon Comprehend endpoint. For more information, see [AWS Lambda](https://aws.amazon.com/translate/ "Opens the Amazon AWS Lambda page") in the Amazon featured services website.
+* **AWS Serverless Application Model** - An open-source framework for building serverless applications using infrastructure as code (IaC). With AWS SAM’s shorthand syntax, developers declare [AWS Cloud Formation](https://aws.amazon.com/cloudformation/ "Opens the Amazon AWS Cloud Formation page") resources and specialized serverless resources that are transformed to infrastructure during deployment. This framework includes two main components: the AWS SAM CLI and the AWS SAM project. The AWS SAM project is the application project directory that is created when you run sam init. The AWS SAM project includes files like the AWS SAM template, which includes the template specification (the shorthand syntax you use to declare resources).
 * **Amazon Comprehend** - An AWS service that uses natural-language processing (NLP) to analyze and interpret the content of text documents. In this solution, you use Amazon Comprehend to train a machine learning model that does real-time classification of inbound emails so they can be routed to the appropriate queue. For more information, see [Amazon Comprehend](https://aws.amazon.com/comprehend/ "Opens the Amazon Comprehend page") in the Amazon featured services website.
 
 :::primary
@@ -86,7 +86,7 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 ### Specialized knowledge
 
 * Administrator-level knowledge of Genesys Cloud
-* AWS Cloud Practitioner-level knowledge of AWS IAM, Amazon Comprehend, Amazon API Gateway, AWS Lambda, AWS SDK for JavaScript, and the AWS CLI (Command Line Interface)
+* AWS Cloud Practitioner-level knowledge of AWS IAM, Amazon Comprehend, Amazon API Gateway, AWS SAM, AWS SDK for JavaScript, and the AWS CLI (Command Line Interface)
 * Experience using the Genesys Cloud Platform API and the Genesys Cloud Platform API SDK - Python
 * Experience using GitHub
 * Experience with Terraform or Terraform Cloud
@@ -109,9 +109,10 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
   * AWS Identity and Access Management (IAM)
   * AWS Comprehend
   * AWS API Gateway
-  * AWS Lambda
+  * AWS Serverless Application Model
 * AWS credentials. For more information about setting up your AWS credentials on your local machine, see [About credential providers](https://docs.aws.amazon.com/sdkref/latest/guide/creds-config-files.html "Opens the About credential providers page") in AWS documentation.
 * AWS CLI. For more information about installing the AWS CLI on your local machine, see [About credential providers](https://aws.amazon.com/cli/ "Opens the About credential providers page") in the AWS documentation.
+* AWS SAM CLI. For more information about installing the AWS SAM CLI on your local machine, see [Install AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html "Opens the Install AWS SAM CLI page") in the AWS documentation.
 
 ### Third-party software
 
@@ -126,7 +127,7 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 * Serverless Framework running on the machine where you'll deploy the solution. For more information, see [Get started with Serverless Framework](https://www.serverless.com/framework/docs/getting-started/ "Opens the Serverless Framework page") in the Serverless Framework documentation.
 * Terraform (the latest binary). For more information, see [Download Terraform](https://www.terraform.io/downloads.html "Opens the Download Terraform page") in the Terraform website.
 * NodeJS version 14.15.0. For more information, see [Install NodeJS](https://github.com/nvm-sh/nvm "Opens the NodeJS GitHub repository").  
-* Python 3.7 or later. For more information, see [Python downloads](https://www.python.org/downloads/ "Goes to the Python Downloads website").
+* Python 3.9. For more information, see [Python downloads](https://www.python.org/downloads/ "Goes to the Python Downloads website").
 
 ## Implementation steps
 
@@ -236,52 +237,50 @@ To classify the inbound email messages, you must first train and deploy an Amazo
     }
   ```
 
-### Deploy the serverless microservice using AWS Lambda and Amazon API Gateway
+### Deploy the serverless microservice using AWS Serverless Application Model
 
-Deploy the microservice that passes the email body from the Architect inbound email flow to the Amazon Comprehend classifier. To do this, invoke the AWS Lambda function using the Amazon API Gateway endpoint. The AWS Lambda is built using Typescript and deployed using the [Serverless framework]( "Goes to the home page of the Serverless framework website").
+Deploy the microservice that passes the email body from the Architect inbound email flow to the Amazon Comprehend classifier. To do this, invoke the AWS Lambda function using the Amazon API Gateway endpoint. The AWS Lambda is built using Python and deployed using the [AWS Serverless Application Model (AWS SAM)](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html "Goes to the developer guide page of the AWS Serverless Application Model (AWS SAM) website").
 
-1. In the **/blueprint/aws-classifier-lambda** directory, create a .env.dev file with these parameters:
+1. In the **/blueprint/aws-sam-email-classifier** directory, run this command:
 
-  * `CLASSIFIER_ARN` - set to the `EndpointArn` value that you noted when you [trained and deployed the AWS Comprehend machine learning classifier](#train-and-deploy-the-aws-comprehend-machine-learning-classifier "Goes to the Train and deploy the AWS Comprehend machine learning classifier section").
-  * `CLASSIFIER_CONFIDENCE_THRESHOLD` - set to a value between 0 and 1 that signifies the level of confidence that you want the classifier to reach before a classification is returned. For example, if `CLASSIFIER_CONFIDENCE_THRESHOLD` is set to 0.75, then the classifier must reach a confidence level of at least 75 percent. If the classifier can't reach this threshold, then an empty string is returned.
+  ```
+  sam build
+  ```
 
-    Example .env.dev file:
+2. If the build process is successful, you may now proceed with running this command to deploy:
 
-    ```
-    CLASSIFIER_ARN=arn:aws:comprehend:us-east-1:000000000000:document-classifier-endpoint/emailclassifier-example-only     CLASSIFIER_CONFIDENCE_THRESHOLD=.75
-    ```
+  ```
+  sam deploy
+  ```
+
+  * `Comprehend Confidence Threshold` - set to a value between 0 and 1 that signifies the level of confidence that you want the classifier to reach before a classification is returned. For example, if `ComprehendConfidenceThreshold` is set to 0.75, then the classifier must reach a confidence level of at least 75 percent. If the classifier can't reach this threshold, then an empty string is returned.
+
     :::primary
-    **Tip**: You can also retrieve the value of the `EndpointArn` endpoint by using the command `aws comprehend list-endpoints`.
+    **Tip**: The default confidence threshold is set to 0.75, but it can be manually set by using the `ComprehendConfidenceThreshold` parameter like this:
     :::
+    ```
+    sam deploy --parameter-overrides ComprehendConfidenceThreshold=0.75
+    ```
 
-2. Open a command prompt and change to the directory **/blueprint/aws-classifier-lambda**.
-3. Download and install all the third-party packages and dependencies:
+3. If the deployment is successful, you may get the API Key from the API Gateway module in AWS Console.
 
-  ```
-  npm i
-  ```
+  ![Get the API Key from the API Gateway Module in AWS Console](images/APIGatewayKey.png "Get the API Key from the API Gateway Module in AWS Console")
 
-4. Deploy the Lambda function:
-
-   ```
-   serverless deploy
-   ```
-
-    The deployment takes approximately a minute to complete. Make a note of the `api key` and `endpoints` attributes. You'll need them when you deploy the Architect inbound email flow.
-
-5. Test the Lambda function:
+4. Test the Lambda function:
 
   ```shell
-  curl --location --request POST '<<YOUR API GATEWAY HERE>>' \
-  --header 'Accept: application/json' \
+  curl --location --request POST '<<YOUR API GATEWAY URL HERE>> ex. https://wgv7odyq40.execute-api.us-east-1.amazonaws.com/Prod/emailclassifier/' \
   --header 'Content-Type: application/json' \
-  --header 'x-amazon-apigateway-api-key-source: HEADER' \
   --header 'X-API-Key: <<YOUR API KEY HERE>>' \
   --data-raw '{
     "EmailSubject": "Question about IRA",
     "EmailBody": "Hi guys,\r\n\r\nI have some questions about my IRA?  \r\n\r\n1.  Can I rollover my existing 401K to my IRA.  \r\n2.  Is an IRA tax-deferred? \r\n3.  Can I make contributions from my IRA to a charitable organization?\r\n4.  Am I able to borrow money from my IRA?\r\n5.  What is the minimum age I have to be to start taking money out of my IRA?\r\n\r\nThanks,\r\n   John Doe"
   }'
   ```
+
+  :::primary
+  **Tip**: API Gateway URL is the endpoint we get after successful deployement added with the string `Prod/emailclassifier` to access the email classifier.
+  :::
 
 If the deployment is successful, you receive a JSON payload that lists the classification of the document along with the confidence level. For example:
 
