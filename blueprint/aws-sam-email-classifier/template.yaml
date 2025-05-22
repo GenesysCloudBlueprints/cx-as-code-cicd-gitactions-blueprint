@@ -1,0 +1,63 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for email-classifier
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Resources:
+  ApiGatewayEndpoint:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          UsagePlanName: GatewayAuthorization
+
+  EmailClassifierFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: emailclassifier/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        EmailClassifier:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            RestApiId: !Ref ApiGatewayEndpoint
+            Path: /emailclassifier
+            Method: post
+      Policies:
+      - Statement:
+        - Sid: ComprehendAccessPolicy
+          Effect: Allow
+          Action:
+          - comprehend:*
+          Resource: !Sub arn:aws:comprehend:${AWS::Region}:${AWS::AccountId}:document-classifier-endpoint/emailclassifier
+      Environment:
+        Variables:
+          AWS_ACCOUNT_ID: !Ref AWS::AccountId
+          COMPREHEND_CONFIDENCE_THRESHOLD: !Ref ComprehendConfidenceThreshold
+Parameters:
+  ComprehendConfidenceThreshold:
+    Type: Number
+    Default: 0.75
+Outputs:
+  EmailClassifierApi:
+    Description: "API Gateway endpoint URL for Prod stage for Email Classifier function"
+    Value: !Sub "https://${ApiGatewayEndpoint}.execute-api.${AWS::Region}.amazonaws.com/Prod/emailclassifier/"
+  EmailClassifierFunction:
+    Description: "Email Classifier Lambda Function ARN"
+    Value: !GetAtt EmailClassifierFunction.Arn
+  EmailClassifierFunctionIamRole:
+    Description: "Implicit IAM Role created for Email Classifier function"
+    Value: !GetAtt EmailClassifierFunctionRole.Arn

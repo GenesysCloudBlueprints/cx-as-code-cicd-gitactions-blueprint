@@ -16,7 +16,7 @@
         "s3:ListBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::nintca-test-bucket"
+        "arn:aws:s3:::inintca-test-bucket"
       ],
       "Effect": "Allow"
     }
