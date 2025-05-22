@@ -16,7 +16,7 @@
 name: Genesys Cloud Email Non-Prod Deploy
 on:
   push:
-    branches: [main]
+    branches: [NO-JIRA-USE-ARCHITECT-FLOW-RESOURCE]
   workflow_dispatch:
 jobs:
   ###
@@ -51,11 +51,7 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - uses: ./.github/actions/genesys-cloud-apply-terraform
-      - uses: ./.github/actions/genesys-cloud-publish-archy-flow
-        with:
-          architect-flow-path: $GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml
-          architect-results-path: $GITHUB_WORKSPACE/output/results.json
-      - uses: ./.github/actions/genesys-cloud-create-email-domain-route
+     
 
   ###
   #  job: execute-platform-tests
@@ -108,8 +104,4 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - uses: ./.github/actions/genesys-cloud-apply-terraform
-      - uses: ./.github/actions/genesys-cloud-publish-archy-flow
-        with:
-          architect-flow-path: $GITHUB_WORKSPACE/blueprint/genesys-cloud-architect-flows/EmailComprehendFlow.yaml
-          architect-results-path: $GITHUB_WORKSPACE/output/results.json
-      - uses: ./.github/actions/genesys-cloud-create-email-domain-route
+ 
