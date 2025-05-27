@@ -33,16 +33,37 @@ jobs:
   #  Step 5 (./.github/actions/genesys-cloud-publish-archy-flow): Uses a local action to run Archy
   #  Step 6 (./.github/actions/genesys-cloud-create-email-domain-route): Uses a local action to run our python script to create our email domain route
   ###
+
+  ###
+  #deploy-email-flow-dev:
+  #  runs-on: ubuntu-latest
+  #  env:
+  #    GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
+  #    GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+  #    GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+  #    GENESYSCLOUD_REGION: "us-west-2"
+  #    GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+  #    GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
+  #    GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+  #    TF_WORKSPACE: "dev"
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - uses: ./.github/actions/genesys-cloud-dev-tools
+  #    - uses: hashicorp/setup-terraform@v1
+  #      with:
+  #        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #    - uses: ./.github/actions/genesys-cloud-apply-terraform   
+  ###
   deploy-email-flow-dev:
     runs-on: ubuntu-latest
     env:
-      GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-      GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-      GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-      GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+      GENESYSCLOUD_OAUTHCLIENT_ID: "700fa2a2-4678-46a2-b63e-0b5fb70fd446"
+      GENESYSCLOUD_OAUTHCLIENT_SECRET: "ddRaHd1JzeTo4Szu6U4yIlF5y99mdWuw3AME7z8Cyb8"
+      GENESYSCLOUD_API_REGION: "https://apps.mypurecloud.com/"
+      GENESYSCLOUD_REGION: "us-east-1"
+      GENESYSCLOUD_ARCHY_REGION: "apps.mypurecloud.com/"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
-      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "mypurecloud.com"
       TF_WORKSPACE: "dev"
     steps:
       - uses: actions/checkout@v2
@@ -61,14 +82,30 @@ jobs:
   #  more then running a python script we are just executing python code "in-line" rather then through a local action.
   #
   ###
+  
+  ###
+  #execute-platform-tests:
+  #  runs-on: ubuntu-latest
+  #  needs: deploy-email-flow-dev
+  #  env:
+  #    GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
+  #    GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
+  #    GENESYSCLOUD_REGION: "us-west-2"
+  #    GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - uses: ./.github/actions/genesys-cloud-dev-tools
+  #    - name: Platform tests
+  #      run: python blueprint/scripts/platform_tests.py
+  ###
   execute-platform-tests:
     runs-on: ubuntu-latest
     needs: deploy-email-flow-dev
     env:
-      GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_DEV }}
-      GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
-      GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+      GENESYSCLOUD_OAUTHCLIENT_ID: "700fa2a2-4678-46a2-b63e-0b5fb70fd446"
+      GENESYSCLOUD_OAUTHCLIENT_SECRET: "ddRaHd1JzeTo4Szu6U4yIlF5y99mdWuw3AME7z8Cyb8"
+      GENESYSCLOUD_REGION: "us-east-1"
+      GENESYSCLOUD_API_REGION: "https://apps.mypurecloud.com/"
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/genesys-cloud-dev-tools
@@ -85,17 +122,40 @@ jobs:
   #  Remember our goal is to have our configuration uniformly applied with all of the environment specific values being applied through
   #  configuration.
   ###
+  
+  ###
+  #deploy-email-flow-test:
+  #  runs-on: ubuntu-latest
+  #  needs: execute-platform-tests
+  #  env:
+  #    GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_TEST }}
+  #    GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST }}
+  #    GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
+  #    GENESYSCLOUD_REGION: "us-west-2"
+  #    GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+  #    GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest"
+  #    GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+  #    TF_WORKSPACE: "test"
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - uses: ./.github/actions/genesys-cloud-dev-tools
+  #    - uses: hashicorp/setup-terraform@v1
+  #      with:
+  #        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+  #    - uses: ./.github/actions/genesys-cloud-apply-terraform
+  ###
+
   deploy-email-flow-test:
     runs-on: ubuntu-latest
     needs: execute-platform-tests
     env:
-      GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_TEST }}
-      GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST }}
-      GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-      GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
+      GENESYSCLOUD_OAUTHCLIENT_ID: "700fa2a2-4678-46a2-b63e-0b5fb70fd446"
+      GENESYSCLOUD_OAUTHCLIENT_SECRET: "ddRaHd1JzeTo4Szu6U4yIlF5y99mdWuw3AME7z8Cyb8"
+      GENESYSCLOUD_API_REGION: "https://apps.mypurecloud.com/"
+      GENESYSCLOUD_REGION: "us-east-1"
+      GENESYSCLOUD_ARCHY_REGION: "apps.mypurecloud.com/"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest"
-      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "mypurecloud.com"
       TF_WORKSPACE: "test"
     steps:
       - uses: actions/checkout@v2
