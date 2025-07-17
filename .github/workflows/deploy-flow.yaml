@@ -90,10 +90,10 @@ jobs:
     env:
       GENESYSCLOUD_OAUTHCLIENT_ID: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_ID_TEST }}
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST }}
-      GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
-      GENESYSCLOUD_REGION: "us-west-2"
+      GENESYSCLOUD_API_REGION: "https://api.mypurecloud.com"
+      GENESYSCLOUD_REGION: "us-east-1"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest1"
-      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
+      GENESYSCLOUD_EMAIL_DOMAIN_REGION: "mypurecloud.com"
       TF_WORKSPACE: "test"
     steps:
       - uses: actions/checkout@v2
