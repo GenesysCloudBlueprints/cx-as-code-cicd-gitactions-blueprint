@@ -40,7 +40,7 @@ jobs:
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
+      GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev1"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "dev"
     steps:
@@ -92,7 +92,7 @@ jobs:
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST }}
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest"
+      GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest1"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "test"
     steps:
