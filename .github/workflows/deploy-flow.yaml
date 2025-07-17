@@ -16,7 +16,7 @@
 name: Genesys Cloud Email Non-Prod Deploy
 on:
   push:
-    branches: [NO-JIRA-USE-ARCHITECT-FLOW-RESOURCE]
+    branches: [dev-test]
   workflow_dispatch:
 jobs:
   ###
@@ -40,7 +40,6 @@ jobs:
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV }}
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagedev"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "dev"
@@ -93,7 +92,6 @@ jobs:
       GENESYSCLOUD_OAUTHCLIENT_SECRET: ${{ secrets.GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST }}
       GENESYSCLOUD_API_REGION: "https://api.usw2.pure.cloud"
       GENESYSCLOUD_REGION: "us-west-2"
-      GENESYSCLOUD_ARCHY_REGION: "usw2.pure.cloud"
       GENESYSCLOUD_EMAIL_DOMAIN: "devengagetest"
       GENESYSCLOUD_EMAIL_DOMAIN_REGION: "pure.cloud"
       TF_WORKSPACE: "test"

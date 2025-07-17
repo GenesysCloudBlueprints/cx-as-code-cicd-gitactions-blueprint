@@ -41,3 +41,5 @@ jspm_packages
 
 #Archy results 
 components/genesys-email-flow/modules/email_flow/scripts/output/results.json
+
+**/.aws-sam/*
