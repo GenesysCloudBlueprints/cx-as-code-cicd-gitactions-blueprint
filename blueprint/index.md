@@ -1,5 +1,5 @@
 ---
-title: Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, CX as Code, and Archy blueprint
+title: Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, and CX as Code blueprint
 author: john.carnell
 indextype: blueprint
 icon: blueprint
@@ -8,12 +8,12 @@ category: 5
 summary: |
   This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations.
 ---
-:::{"alert":"primary","title":"About Genesys Cloud Blueprints","autoCollapse":false} 
-Genesys Cloud blueprints were built to help you jump-start building an application or integrating with a third-party partner. 
+:::{"alert":"primary","title":"About Genesys Cloud Blueprints","autoCollapse":false}
+Genesys Cloud blueprints were built to help you jump-start building an application or integrating with a third-party partner.
 Blueprints are meant to outline how to build and deploy your solutions, not a production-ready turn-key solution.
- 
-For more details on Genesys Cloud blueprint support and practices 
-please see our Genesys Cloud blueprint [FAQ](https://developer.genesys.cloud/blueprints/faq)sheet.
+
+For more details on Genesys Cloud blueprint support and practices
+please see our Genesys Cloud blueprint [FAQ](https://developer.genesys.cloud/blueprints/faq) sheet.
 :::
 
 This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to build a CI/CD pipeline to deploy Genesys Cloud objects across multiple Genesys Cloud organizations.
@@ -21,7 +21,6 @@ This Genesys Cloud Developer Blueprint explains how to use GitHub Actions to bui
 This blueprint also demonstrates how to:
 
 * Set up a GitHub Action CI/CD pipeline to execute a CX-as-Code deployment
-* Install Archy in a GitHub Action virtual machine
 * Configure Terraform Cloud to manage the backing state for the CX-as-Code deployment along with the lock management for the Terraform deployment
 * Demonstrate how to invoke a CX-as-Code deployment within a CI/CD pipeline to deploy all the required Genesys Cloud objects
 * Demonstrate how to deploy a single Architect flow across multiple environments and leverage platform tests to determine whether a build gets deployed to production
@@ -36,18 +35,19 @@ An organization is interested in deploying a Genesys Cloud Architect flow and it
 
 ## Solution
 
-Developers use Archy and CX as Code to manage their Architect flow and dependent objects as plain text files that can be checked into source control. The developers use GitHub Actions to define and execute a CI/CD pipeline that first deploys the Architect flow and the dependent objects to the Genesys Cloud development environment. Then a platform test is executed to ensure that the deployed flow is functioning properly. If the platform test passes, the code then deploys the same Architect flow and configuration to a test environment.
+Developers use CX as Code to manage their Architect flow and dependent objects as plain text files that can be checked into source control. The developers use GitHub Actions to define and execute a CI/CD pipeline that first deploys the Architect flow and the dependent objects to the Genesys Cloud development environment. Then a platform test is executed to ensure that the deployed flow is functioning properly. If the platform test passes, the code then deploys the same Architect flow and configuration to a test environment.
 
-![Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, CX as Code, and Archy](images/GitHubCICDPipeline.png "Build a CI/CD pipeline using GitHub Actions, Terraform, CX as Code, and Archy")
+![Build a CI/CD pipeline using GitHub Actions, Terraform Cloud, and CX as Code](images/GitHubCICDPipeline.png "Build a CI/CD pipeline using GitHub Actions, Terraform, and CX as Code")
 
 This illustration highlights these workflow steps:
 
 1. **A developer checks their Architect flow and CX-as-Code files into the GitHub repository**. Upon checkin, a GitHub Action is executed that begins the deployment of the Architect inbound email flow along within its dependent objects to a development Genesys Cloud environment.
-2. **A GitHub Action spins up a virtual environment an executes the CI/CD pipeline**. The GitHub Action:   
-  * Installs Terraform, which handles the backing state and locking.
-  * Executes the CX-as-Code environment and creates all prerequisites that are needed for the Architect inbound email flow.
-  * Installs Archy and imports the Architect inbound email flow to the target Genesys Cloud environment and source control. **Note**: Archy does not manage flow dependencies.
-  * Runs a small Python script that uses the Genesys Cloud Platform API SDK to connect the Architect inbound email flow to its trigger and the email domain route.
+2. **A GitHub Action spins up a virtual environment an executes the CI/CD pipeline**. The GitHub Action:
+
+* Installs Terraform, which handles the backing state and locking.
+* Executes the CX-as-Code environment and creates all prerequisites that are needed for the Architect inbound email flow.
+* Imports the Architect inbound email flow to the target Genesys Cloud environment and source control.
+
 3. **Once the deployment to the development environment is complete, the GitHub Action spins up another environment. It also runs a platform test that checks to make sure the flow and its dependent objects function properly**. The test involves a small Python script that uses the Genesys Cloud Platform API SDK. If the platform tests pass, the GitHub Action starts a deploy to a Genesys Cloud test environment. If the platform tests fail, no further deployments occur.
 4. **If the platform test passes, a GitHub Action repeats step #2 to create a test Genesys Cloud environment**. The deployment completes the entire Genesys Cloud core configuration.
 
@@ -62,7 +62,6 @@ This illustration highlights these workflow steps:
 ## Solution components
 
 * **Genesys Cloud** - A suite of Genesys Cloud services for enterprise-grade communications, collaboration, and contact center management. In this solution, you use an Architect inbound email flow, and a Genesys Cloud integration, data action, queues, and email configuration.
-* **Archy** - A Genesys Cloud command-line tool for building and managing Architect flows.
 * **CX as Code** - A Genesys Cloud Terraform provider that provides a command line interface for declaring core Genesys Cloud objects.
 * **GitHub** - A cloud-based source control system that facilitates collaboration on development projects.
 * **Terraform Cloud** - A cloud-based Terraform solution that provides backend state storage and locking at scale.
@@ -79,7 +78,7 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 
 ## Software development kits
 
-* **Genesys Cloud Platform API SDK - Python** - Client libraries used to simplify application integration with Genesys Cloud by handling low-level HTTP requests. The Genesys Cloud Platform API SDK is used in two ways. First, since we run Archy from the command line, we leverage the Genesys Cloud Python SDK to create the email address that triggers our Architect inbound email flow. Second, we use the Genesys Cloud Python SDK to write test cases to ensure core behaviors in the flow function properly.
+* **Genesys Cloud Platform API SDK - Python** - Client libraries used to simplify application integration with Genesys Cloud by handling low-level HTTP requests. The Genesys Cloud Platform API SDK is used to write test cases to ensure core behaviors in the flow function properly.
 
 ## Prerequisites
 
@@ -99,7 +98,6 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 
 * A Genesys Cloud license. For more information, see [Genesys Cloud Pricing](https://www.genesys.com/pricing "Opens the Genesys Cloud pricing page") in the Genesys website.
 * Master Admin role. For more information, see [Roles and permissions overview](https://help.mypurecloud.com/?p=24360 "Opens the Roles and permissions overview article") in the Genesys Cloud Resource Center.
-* Archy. For more information, see [Welcome to Archy](/devapps/archy/ "Goes to the Welcome to Archy page").
 * CX as Code. For more information, see [CX as Code](https://developer.genesys.cloud/api/rest/CX-as-Code/ "Opens the CX as Code page").
 * Genesys Cloud Platform API Client SDK - Python. For more information, see [Platform API Client SDK - Python](/api/rest/client-libraries/python/ "Goes to the Platform API Client SDK - Python page").
 
@@ -124,6 +122,7 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 :::
 
 ### Development tools running in your local environment
+
 * Serverless Framework running on the machine where you'll deploy the solution. For more information, see [Get started with Serverless Framework](https://www.serverless.com/framework/docs/getting-started/ "Opens the Serverless Framework page") in the Serverless Framework documentation.
 * Terraform (the latest binary). For more information, see [Download Terraform](https://www.terraform.io/downloads.html "Opens the Download Terraform page") in the Terraform website.
 * NodeJS version 14.15.0. For more information, see [Install NodeJS](https://github.com/nvm-sh/nvm "Opens the NodeJS GitHub repository").  
@@ -133,18 +132,19 @@ While the primary focus of this blueprint will be setting up a CI/CD pipeline, t
 
 1. [Clone the GitHub repository](#clone-the-github-repository "Goes to the Clone the GitHub repository section")
 2. [Train and deploy the AWS Comprehend machine learning classifier](#train-and-deploy-the-amazon-comprehend-machine-learning-classifier "Goes to the Train and deploy the AWS Comprehend machine learning classifier section")
-3. [Deploy the serverless microservice using AWS Lambda and Amazon API Gateway](#deploy-the-serverless-microservice-using-aws-lambda-and-amazon-api-gateway "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section")
-4. [Define the Terraform Cloud configuration](#define-the-terraform-cloud-configuration "Goes to the Define the Terraform Cloud configuration section")
-5. [Define the GitHub Actions configuration](#define-the-github-actions-configuration "Goes to the Define the GitHub Actions configuration section")
-6. [Deploy the Genesys Cloud objects](#deploy-the-genesys-cloud-objects "Goes to the Deploy the Genesys Cloud objects section")
-7. [Test the deployment](#test-the-deployment "Goes to the Test the deployment section")
+3. [Deploy the serverless microservice using AWS Serverless Application Model](#deploy-the-serverless-microservice-using-aws-serverless-application-model "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section")
+4. [Configure the CX as Code Project](#configure-the-cx-as-code-project "Goes to the Configure the CX as Code Project section")
+5. [Define the Terraform Cloud configuration](#define-the-terraform-cloud-configuration "Goes to the Define the Terraform Cloud configuration section")
+6. [Define the GitHub Actions configuration](#define-the-github-actions-configuration "Goes to the Define the GitHub Actions configuration section")
+7. [Deploy the Genesys Cloud objects](#deploy-the-genesys-cloud-objects "Goes to the Deploy the Genesys Cloud objects section")
+8. [Test the deployment](#test-the-deployment "Goes to the Test the deployment section")
 
 ### Clone the GitHub repository
 
-Clone the GitHub repository [cx-as-code-cicd-gitactions-blueprint](https://github.com/GenesysCloudBlueprints/cx-as-code-cicd-gitactions-blueprint "Opens the GitHub repository") to your local machine. The `email-aws-comprehend-blueprint/blueprint` folder includes solution-specific scripts and files in these subfolders:
+Clone the GitHub repository [cx-as-code-cicd-gitactions-blueprint](https://github.com/GenesysCloudBlueprints/cx-as-code-cicd-gitactions-blueprint "Opens the GitHub repository") to your local machine or fork it for your use as a direct template for your project. The `email-aws-comprehend-blueprint/blueprint` folder includes solution-specific scripts and files in these subfolders:
+
 * `aws-comprehend`
-* `aws-classifier-lambda`
-* `genesys-cloud-architect-flow`
+* `aws-sam-email-classifier`
 * `genesys-cloud-cx-as-code`
 
 ### Train and deploy the Amazon Comprehend machine learning classifier
@@ -157,41 +157,43 @@ To classify the inbound email messages, you must first train and deploy an Amazo
 
 1. Set up your Amazon S3 bucket:
 
+   ```bash
+   aws s3api create-bucket --acl private --bucket your-bucket-name-here --region your-region
    ```
-   aws s3api create-bucket --acl private --bucket <<your-bucket-name-here>> --region <<your region>>
-   ```
+
 2. Copy and paste the `aws-comprehend/comprehendterm.csv` training corpus file into it:
 
-   ```
-   aws s3 cp comprehendterms.csv s3://<<your-bucket-name-here>>
+   ```bash
+   aws s3 cp comprehendterms.csv s3://your-bucket-name-here
    ```
 
 3. In the `aws-comprehend/EmailClassifierBucketBucketAccessRole-Permission.json` file, modify line 10 and line 19 with the location of your S3 bucket.
 
 4. Create the AWS Identity and Access Management (IAM) role and policy and attach the role to the policy that the AWS Comprehend classifier uses:
 
-   ```
+   ```bash
    aws iam create-role --role-name EmailClassifierBucketAccessRole --assume-role-policy-document file://EmailClassifierBucketAccessRole-TrustPolicy.json
    ```
 
-   ```
+   ```bash
    aws iam create-policy --policy-name BucketAccessPolicy --policy-document file://EmailClassifierBucketAccessRole-Permissions.json
    ```
 
-   ```
-   aws iam attach-role-policy --policy-arn <<POLICY ARN return from the aws iam create-policy command above>> --role-name EmailClassifierBucketAccessRole
+   ```bash
+   aws iam attach-role-policy --policy-arn the-policy-arn-of-BucketAccessPolicy --role-name EmailClassifierBucketAccessRole
    ```
 
    Make a note of the `policy-arn` value that is returned when you run the command `aws iam create-policy`. You need to use this value in the next step.
 
 5. Train the Amazon Comprehend document classifier:
 
+  ```bash
+  aws comprehend create-document-classifier --document-classifier-name FinancialServices --data-access-role-arn the-policy-arn-of-BucketAccessPolicy --input-data-config S3Uri=s3://your-bucket-name-here --language-code en
   ```
-  aws comprehend create-document-classifier --document-classifier-name FinancialServices --data-access-role-arn <<ARN FROM STEP 2 HERE>> --input-data-config S3Uri=s3://<<YOUR BUCKET NAME HERE>> --language-code en
-  ```    
+
   It takes several minutes for Amazon Comprehend to train the classifier, and you can proceed to the next step only after the training is completed. To check the status of the classifier, use the command:
 
-  ```
+  ```bash
   aws comprehend list-document-classifiers
   ```
 
@@ -199,26 +201,27 @@ To classify the inbound email messages, you must first train and deploy an Amazo
 
 6. Create the real-time document classifier endpoint:
 
-  ```
-  aws comprehend create-endpoint --endpoint-name emailclassifier --model-arn <<YOUR DocumentClassifierArn here>> --desired-inference-units 1
+  ```bash
+  aws comprehend create-endpoint --endpoint-name emailclassifier --model-arn your-document-classifier-arn --desired-inference-units 1
   ```
 
   It takes several minutes for the real-time classifier endpoint to activate. To monitor the status of the endpoint, use the command:
 
-  ```
+  ```bash
   aws comprehend list-endpoints
   ```
+
   Check for the endpoint named `emailclassifier`. When the `Status` attribute is set to `IN_SERVICE`, the classifier is ready for use. Make a note of the `EndpointArn` attribute for the `emailclassifier` endpoint that you've created. This value will need to be set when you're deploying the classifier Lambda later on in the blueprint.
 
 7. Test the classifier:
 
-  ```
-  aws comprehend classify-document --text "Hey I had some questions about what I can use my 529 for in regards to my children's college tuition. Can I spend the money on things other then tuition" --endpoint-arn <<YOUR EndpointArn>>
+  ```bash
+  aws comprehend classify-document --text "Hey I had some questions about what I can use my 529 for in regards to my children's college tuition. Can I spend the money on things other then tuition" --endpoint-arn your-endpoint-arn
   ```
 
   If the deployment is successful, a JSON output similar to the following appears:
 
-  ``` language:JSON
+  ```json
   {
     "Classes": [
         {
@@ -241,34 +244,52 @@ To classify the inbound email messages, you must first train and deploy an Amazo
 
 Deploy the microservice that passes the email body from the Architect inbound email flow to the Amazon Comprehend classifier. To do this, invoke the AWS Lambda function using the Amazon API Gateway endpoint. The AWS Lambda is built using Python and deployed using the [AWS Serverless Application Model (AWS SAM)](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html "Goes to the developer guide page of the AWS Serverless Application Model (AWS SAM) website").
 
-1. In the **/blueprint/aws-sam-email-classifier** directory, run this command:
+1. Create an S3 bucket where your resources will be stored. You may use the AWS CLI to create one like this:
 
-  ```
+```bash
+aws s3api create-bucket --acl private --bucket your-bucket-name-here --region your-region
+```
+
+Then in `/blueprint/aws-sam-email-classifier` with the file `samconfig.toml`, modify the `s3_bucket` in `[default.deploy.parameters]` to the bucket name you just created. Also modify the `region` to the region you want the CloudFormation to be deployed. A snippet of the file looks like this:
+
+```toml
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+s3_bucket = "your-bucket-name-here"
+region = "your-aws-region"
+image_repositories = []
+```
+
+2. In the `/blueprint/aws-sam-email-classifier` directory, run this command:
+
+  ```bash
   sam build
   ```
 
-2. If the build process is successful, you may now proceed with running this command to deploy:
+3. If the build process is successful, you may now proceed with running this command to deploy:
 
-  ```
+  ```bash
   sam deploy
   ```
 
-  * `Comprehend Confidence Threshold` - set to a value between 0 and 1 that signifies the level of confidence that you want the classifier to reach before a classification is returned. For example, if `ComprehendConfidenceThreshold` is set to 0.75, then the classifier must reach a confidence level of at least 75 percent. If the classifier can't reach this threshold, then an empty string is returned.
+* `Comprehend Confidence Threshold` - set to a value between 0 and 1 that signifies the level of confidence that you want the classifier to reach before a classification is returned. For example, if `ComprehendConfidenceThreshold` is set to 0.75, then the classifier must reach a confidence level of at least 75 percent. If the classifier can't reach this threshold, then an empty string is returned.
 
     :::primary
     **Tip**: The default confidence threshold is set to 0.75, but it can be manually set by using the `ComprehendConfidenceThreshold` parameter like this:
     :::
-    ```
+
+    ```bash
     sam deploy --parameter-overrides ComprehendConfidenceThreshold=0.75
     ```
 
-3. If the deployment is successful, you may get the API Key from the API Gateway module in AWS Console.
+4. If the deployment is successful, you may get the API Key from the API Gateway module in AWS Console.
 
   ![Get the API Key from the API Gateway Module in AWS Console](images/APIGatewayKey.png "Get the API Key from the API Gateway Module in AWS Console")
 
-4. Test the Lambda function:
+5. Test the Lambda function:
 
-  ```shell
+  ```bash
   curl --location --request POST '<<YOUR API GATEWAY URL HERE>> ex. https://wgv7odyq40.execute-api.us-east-1.amazonaws.com/Prod/emailclassifier/' \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: <<YOUR API KEY HERE>>' \
@@ -291,13 +312,74 @@ If the deployment is successful, you receive a JSON payload that lists the class
 }
 ```
 
+### Configure the CX as Code Project
+
+Configure the CX as Code Project that is located in `/blueprint/genesys-cloud-cx-as-code`. You will need to modify the following:
+
+#### main.tf
+
+Change the `organization` to your organization in Terraform Cloud that you will use. You may also change the `prefix` of the workspace that you will use.
+
+The snippet in the file looks like this:
+
+```hcl
+terraform {
+
+  backend "remote" {
+    organization = "your-organization-name"
+
+    workspaces {
+      prefix = "genesys_email_" # you may change the prefix if needed
+    }
+  }
+
+  required_providers {
+    genesyscloud = {
+      source = "mypurecloud/genesyscloud"
+    }
+  }
+}
+```
+
+#### /modules/users/main.tf
+
+This blueprint will provision a user named Sheldon Cooper. This type of setup is fine if you want to correct setup and provision users for a demo or dev environment. However, I would highly recommend against doing this as a mechanism to provision users and map their roles.  These things tend to by dynamic and should be managed as scripts instead of through a DevOps style tool.
+
+The user that will be provisioned looks like this:
+
+```hcl
+resource "genesyscloud_user" "sheldoncooper_agent" {
+  email           = "sheldon.cooper.test@neverreal2.demo.com"
+  name            = "Sheldon Cooper"
+  password        = "somepassword"
+  state           = "active"
+  department      = "Development"
+  title           = "Agent"
+  acd_auto_answer = true
+  addresses {
+
+    phone_numbers {
+      number     = "+19205551212"
+      media_type = "PHONE"
+      type       = "MOBILE"
+    }
+  }
+  employer_info {
+    official_name = "Sheldon Cooper"
+    employee_id   = "12345"
+    employee_type = "Full-time"
+    date_hire     = "2021-03-18"
+  }
+}
+```
+
 ### Define the Terraform Cloud configuration
 
 Terraform Cloud provides:
 
-*  **A backing store**. Terraform maintains state information for all configuration objects it manages. While there are many ways to set up Terraform backing store, by leveraging Terraform cloud we let Terraform manage all of this infrastructure for us.
-*  **Lock management**. Terraform requires that only one instance of a particular Terraform configuration run at a time. Terraform Cloud provides this locking mechanism and will fail a Terraform deploy if the configuration's deployment is already underway.
-*  **An execution environment**. Terraform Cloud copies your Terraform configuration and runs it remotely in their cloud environment.
+* **A backing store**. Terraform maintains state information for all configuration objects it manages. While there are many ways to set up Terraform backing store, by leveraging Terraform cloud we let Terraform manage all of this infrastructure for us.
+* **Lock management**. Terraform requires that only one instance of a particular Terraform configuration run at a time. Terraform Cloud provides this locking mechanism and will fail a Terraform deploy if the configuration's deployment is already underway.
+* **An execution environment**. Terraform Cloud copies your Terraform configuration and runs it remotely in their cloud environment.
 
 For this blueprint, you need to create two Terraform Cloud workspaces: a development workspace and a workspace for your Terraform environment. In addition, you need to set up the Terraform and environment variables that these workspaces use and a Terraform cloud user token that Github uses to authenticate with Terraform.
 
@@ -305,13 +387,15 @@ For more information, see [Terraform Configurations in Terraform Cloud Workspace
 
 #### Set up your development workspace
 
-1.  Click **New Workspace**.
-2.  Select the CLI-driven workflow.
-3.  Provide a workspace name. For this blueprint, we use `genesys_email_dev`.  
-4.  Click **Create workspace** environment. If everything works correctly the **Waiting for configuration page** appears.  
-5.  Click **Settings** > **General** and verify these settings:
-  * **Execution mode** - Remote
-  * **Terraform Working Directory** - /genesys-cloud-cx-as-code
+1. Click **New Workspace**.
+2. Select the CLI-driven workflow.
+3. Provide a workspace name. For this blueprint, we use `genesys_email_dev`.  
+4. Click **Create workspace** environment. If everything works correctly the **Waiting for configuration page** appears.  
+5. Click **Settings** > **General** and verify these settings:
+
+* **Execution mode** - Remote
+* **Terraform Working Directory** - /genesys-cloud-cx-as-code
+
 6. Click **Save settings**.
 
 #### Set up your Terraform and environment variables
@@ -321,23 +405,24 @@ Terraform variables parameterize your scripts. Environment variables are usually
 1. Click **Variables**.
 2. Define the following Terraform variables:
 
-  * `genesys_email_domain` - A globally unique name for your Genesys Cloud email domain name. If you choose a name that exists, then the execution of the CX as Code scripts fails. Remember whatever you pick will be the prefix for your email address. For example, if the value you set here is "genesys_email_dev" and your Genesys Cloud organization is in us-west-2, your generated email address will be "@genesys_email_dev.pure.cloud".
-  * `genesys_email_domain_region` - The suffix for the email domain. Valid values are based on the corresponding AWS regions:
-    | Region            	| Domain suffix    	|
-    |--------------------	|-----------------	|
-    | US East             | mypurecloud.com   |
-    | US West            	| pure.cloud      	|
-    | Canada             	| pure.cloud      	|
-    | Europe (Ireland)   	| mypurecloud.ie  	|
-    | Europe (London)    	| pure.cloud      	|
-    | Europe (Frankfurt) 	| mypurecloud.de  	|
-    | Asia (Mumbai)      	| pure.cloud      	|
-    | Asia (Tokyo)       	| mypurecloud.jp  	|
-    | Asia (Seoul)       	| pure.cloud      	|
-    | Asia (Sydney)      	| mypurecloud.au  	|
+* `genesys_email_domain` - A globally unique name for your Genesys Cloud email domain name. If you choose a name that exists, then the execution of the CX as Code scripts fails. Remember whatever you pick will be the prefix for your email address. For example, if the value you set here is "genesys_email_dev" and your Genesys Cloud organization is in us-west-2, your generated email address will be "@genesys_email_dev.pure.cloud".
+* `genesys_email_domain_region` - The suffix for the email domain. Valid values are based on the corresponding AWS regions:
 
-  * `classifier_url` - The endpoint that invokes the classifier. Use the endpoint that you noted when you [deployed the AWS Lambda function](#deploy-the-serverless-microservice-using-aws-lambda-and-amazon-api-gateway "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section").
-  * `classifier_api_key` - The API key that invokes the endpoint. Use the API key that you noted when you [deployed the AWS Lambda function](#deploy-the-serverless-microservice-using-aws-lambda-and-amazon-api-gateway "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section").
+    | Region             | Domain suffix     |
+    |-------------------- |----------------- |
+    | US East             | mypurecloud.com   |
+    | US West             | pure.cloud       |
+    | Canada              | pure.cloud       |
+    | Europe (Ireland)    | mypurecloud.ie   |
+    | Europe (London)     | pure.cloud       |
+    | Europe (Frankfurt)  | mypurecloud.de   |
+    | Asia (Mumbai)       | pure.cloud       |
+    | Asia (Tokyo)        | mypurecloud.jp   |
+    | Asia (Seoul)        | pure.cloud       |
+    | Asia (Sydney)       | mypurecloud.au   |
+
+* `classifier_url` - The endpoint that invokes the classifier. Use the endpoint that you noted when you [deployed the AWS resources with AWS SAM](#deploy-the-serverless-microservice-using-aws-serverless-application-model "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section").
+* `classifier_api_key` - The API key that invokes the endpoint. Use the API key that you noted when you [deployed the AWS resources with AWS SAM](#deploy-the-serverless-microservice-using-aws-serverless-application-model "Goes to the Deploy the serverless microservice using AWS Lambda and Amazon API Gateway section").
 
   :::primary
   **Important**: Because this is an API key, it is recommended you mark this variable as sensitive.
@@ -345,9 +430,9 @@ Terraform variables parameterize your scripts. Environment variables are usually
 
 3. Define your environment variables:  
 
-  * `GENESYSCLOUD_OAUTHCLIENT_ID` - This is the Genesys Cloud client credential grant Id that CX as Code executes against. Mark this environment variable as sensitive.
-  * `GENESYSCLOUD_OAUTHCLIENT_SECRET` - This is the Genesys Cloud client credential secret that CX as Code executes against. Mark this environment variable as sensitive.
-  * `GENESYSCLOUD_REGION` - This is the Genesys Cloud region in which your organization is located.
+* `GENESYSCLOUD_OAUTHCLIENT_ID` - This is the Genesys Cloud client credential grant Id that CX as Code executes against. Mark this environment variable as sensitive.
+* `GENESYSCLOUD_OAUTHCLIENT_SECRET` - This is the Genesys Cloud client credential secret that CX as Code executes against. Mark this environment variable as sensitive.
+* `GENESYSCLOUD_REGION` - This is the Genesys Cloud region in which your organization is located.
 
 #### Set up a test workspace
 
@@ -356,13 +441,13 @@ Repeat the steps you just completed to set up your development workspace, but ma
 1. Use a different workspace name. For example: "genesys_email_test". Remember, whatever you pick will be the prefix for your email. So, if the value you set here is "genesys_email_test" and your organization is in us-west2, your generated email address will be "@genesys_email_test.pure.cloud".
 2. Set the following variables to point to your test workspace:
 
-  * `genesys_email_domain`
-  * `genesys_email_domain_region`
-  * `classifier_url`
-  * `classifier_api_key`
-  * `GENESYSCLOUD_OAUTHCLIENT_ID`
-  * `GENESYSCLOUD_OAUTHCLIENT_SECRET`
-  * `GENESYCLOUD_REGION`  
+* `genesys_email_domain`
+* `genesys_email_domain_region`
+* `classifier_url`
+* `classifier_api_key`
+* `GENESYSCLOUD_OAUTHCLIENT_ID`
+* `GENESYSCLOUD_OAUTHCLIENT_SECRET`
+* `GENESYCLOUD_REGION`  
 
 #### Set up a Terraform cloud user token
 
@@ -387,29 +472,29 @@ You now need to generate a Terraform Cloud user token so that when Terraform is 
 
 GitHub Actions are the mechanism in which you define a CI/CD pipeline. GitHub Actions generally consist of two parts:
 
-1.  **One or more workflow files** - Github Action Workflow files define the sequence of steps that comprise the CI/CD pipeline. These steps occur when the workflow executes. This blueprint contains a single workflow file called deploy-flow.yaml, which is located in the **.github/workflows** directory. This file contains all of the steps needed to install Terraform and Archy, deploy the Architect inbound email flow, and deploy the Genesys Cloud objects to a dev and test organization.
+1. **One or more workflow files** - Github Action Workflow files define the sequence of steps that comprise the CI/CD pipeline. These steps occur when the workflow executes. This blueprint contains a single workflow file called deploy-flow.yaml, which is located in the **.github/workflows** directory. This file contains all of the steps needed to install Terraform, deploy the Architect inbound email flow, and deploy the Genesys Cloud objects to a dev and test organization. You can modify the files to your own use case in the `/.github` directory.
 
-2.  **Repository secrets** - Github Actions and Terraform Cloud need to access Genesys Cloud OAuth2 credentials, Terraform credentials, and an API key for a REST endpoint used in the flow. In your local repository, go to to **settings** > **secrets** menu and add the following repository secrets, which are used by the Archy and Python scripts that the GitHub Action executes:
+2. **Repository secrets** - Github Actions and Terraform Cloud need to access Genesys Cloud OAuth2 credentials, Terraform credentials, and an API key for a REST endpoint used in the flow. In your local repository, go to to **settings** > **secrets** menu and add the following repository secrets, which are used by the Python script that the GitHub Action executes:
 
-  * `GENESYSCLOUD_OAUTHCLIENT_ID_DEV` - The Genesys Cloud OAuth Client Id for your Genesys Cloud development environment
-  * `GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV` - The Genesys Cloud OAuth secret for your Genesys Cloud development environment
-  * `GENESYSCLOUD_OAUTHCLIENT_ID_TEST` - The Genesys Cloud OAuth Client Id for your Genesys Cloud test environment   
-  * `GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST` - The Genesys Cloud OAuth Client secret for your Genesys Cloud test environment  
+* `GENESYSCLOUD_OAUTHCLIENT_ID_DEV` - The Genesys Cloud OAuth Client Id for your Genesys Cloud development environment
+* `GENESYSCLOUD_OAUTHCLIENT_SECRET_DEV` - The Genesys Cloud OAuth secret for your Genesys Cloud development environment
+* `GENESYSCLOUD_OAUTHCLIENT_ID_TEST` - The Genesys Cloud OAuth Client Id for your Genesys Cloud test environment
+* `GENESYSCLOUD_OAUTHCLIENT_SECRET_TEST` - The Genesys Cloud OAuth Client secret for your Genesys Cloud test environment  
 
 3. Add your [Terraform cloud user token](#set-up-a-terraform-cloud-user-token "Goes to the Set up a Terraform cloud user token section"), which Terraform needs to authenticate with Terraform Cloud:
 
-  * `TF_API_TOKEN`
+* `TF_API_TOKEN`
 
 ### Deploy the Genesys Cloud objects
 
 1. To deploy both your Genesys Cloud configuration and your Architect flows, do one of the following:
 
-  * **To automatically kick off a deploy**, make a change to the configuration code and commit it to the source repository.  
-  * **To manually launch your deploy**:
+* **To automatically kick off a deploy**, make a change to the configuration code and commit it to the source repository.  
+* **To manually launch your deploy**:
 
     1. Log into the Github repository that contains your code.
     2. Click **Actions**.
-    3.  Click **Genesys Cloud Email Non-Prod**.
+    3. Click **Genesys Cloud Email Non-Prod**.
     4. Click **Run workflow**.
     5. From the drop-down list, select the main branch click **Run workflow**.
 

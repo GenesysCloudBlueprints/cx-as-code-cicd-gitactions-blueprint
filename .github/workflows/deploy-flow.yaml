@@ -16,7 +16,7 @@
 name: Genesys Cloud Email Non-Prod Deploy
 on:
   push:
-    branches: [dev-test]
+    branches: [dev, test]
   workflow_dispatch:
 jobs:
   ###
@@ -27,11 +27,8 @@ jobs:
   #  Once all of the environment variables are set the following steps are taken:
   #
   #  Step 1 (actions/checkout@v2): Uses a remote action to checkout all of the source code.
-  #  Step 2 (./.github/actions/genesys-cloud-dev-tools): Uses a local action to install the Genesys Cloud Python SDK and the Archy tools
-  #  Step 3 (hashicorp/setup-terraform@v1): Uses a remote action to install Terraform and configure the Terraform token
-  #  Step 4 (./.github/actions/genesys-cloud-apply-terraform): Uses a local action to run Terraform
-  #  Step 5 (./.github/actions/genesys-cloud-publish-archy-flow): Uses a local action to run Archy
-  #  Step 6 (./.github/actions/genesys-cloud-create-email-domain-route): Uses a local action to run our python script to create our email domain route
+  #  Step 2 (hashicorp/setup-terraform@v1): Uses a remote action to install Terraform and configure the Terraform token
+  #  Step 3 (./.github/actions/genesys-cloud-apply-terraform): Uses a local action to run Terraform
   ###
   deploy-email-flow-dev:
     runs-on: ubuntu-latest
@@ -45,7 +42,6 @@ jobs:
       TF_WORKSPACE: "dev"
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/genesys-cloud-dev-tools
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
@@ -97,7 +93,6 @@ jobs:
       TF_WORKSPACE: "test"
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/genesys-cloud-dev-tools
       - uses: hashicorp/setup-terraform@v1
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}

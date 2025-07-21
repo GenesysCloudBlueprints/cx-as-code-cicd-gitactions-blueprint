@@ -16,9 +16,8 @@ lint = true
 [default.deploy.parameters]
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
-resolve_s3 = true
-s3_prefix = "email-classifier"
-region = "us-east-1"
+s3_bucket = "your-bucket-name-here"
+region = "your-aws-region"
 image_repositories = []
 
 [default.package.parameters]
