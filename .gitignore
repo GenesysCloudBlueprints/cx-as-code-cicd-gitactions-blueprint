@@ -35,9 +35,31 @@ jspm_packages
 .terraform
 .terraform.lock.hcl
 
-# .env
+# Environment files
+.env
 .env.dev
 .env.local
+.env.production
+
+# IDE and editor files
+.history/
+.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Terraform variable files with sensitive data
+terraform.tfvars
+*.auto.tfvars
 
 #Archy results 
 components/genesys-email-flow/modules/email_flow/scripts/output/results.json
